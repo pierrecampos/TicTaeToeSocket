@@ -15,7 +15,6 @@ public class Main extends Application {
         Scene scene = new Scene(fxmlLoader.load(), 600, 400);
         stage.setTitle("Jogo da velha!");
         stage.setScene(scene);
-//        stage.initStyle(StageStyle.TRANSPARENT);
         stage.show();
     }
 }
