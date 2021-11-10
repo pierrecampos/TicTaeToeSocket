@@ -76,6 +76,7 @@ public class Client extends JFrame implements KeyListener {
     @Override
     public void keyPressed(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+
         }
 
     }

@@ -43,7 +43,6 @@ public class MainController implements Initializable {
             dialogStage.initOwner(parentStage);
             dialogStage.showAndWait();
 
-
         } catch (IOException e) {
             e.printStackTrace();
         }
