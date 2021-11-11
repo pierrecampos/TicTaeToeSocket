@@ -1,11 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.TilePane?>
 
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.shape.Line?>
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.2"
->
-    <children>
-        <Line endX="186.0" endY="114.29289245605469" startX="186.0" startY="343.0"/>
-    </children>
-</AnchorPane>
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.GameScreenController">
+   <center>
+      <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+         <children>
+            <TilePane prefHeight="600.0" prefWidth="600.0">
+               <children>
+                  <Button mnemonicParsing="false" onAction="#onBtn1Click" prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: BLACK; -fx-background-color: ffffff00;" />
+                  <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#onBtn2Click" prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: BLACK; -fx-background-color: ffffff00;" />
+                  <Button layoutX="210.0" layoutY="10.0" mnemonicParsing="false" onAction="#onBtn3Click" prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: BLACK; -fx-background-color: ffffff00;" />
+                  <Button layoutX="410.0" layoutY="10.0" mnemonicParsing="false" onAction="#onBtn4Click" prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: BLACK; -fx-background-color: ffffff00;" />
+                  <Button layoutX="210.0" layoutY="210.0" mnemonicParsing="false" onAction="#onBtn6Click" prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: BLACK; -fx-background-color: ffffff00;" />
+                  <Button layoutX="10.0" layoutY="410.0" mnemonicParsing="false" onAction="#onBtn8Click" prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: BLACK; -fx-background-color: ffffff00;" />
+                  <Button layoutX="10.0" layoutY="210.0" mnemonicParsing="false" onAction="#onBtn5Click" prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: BLACK; -fx-background-color: ffffff00;" />
+                  <Button layoutX="210.0" layoutY="410.0" mnemonicParsing="false" onAction="#onBtn9Click" prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: BLACK; -fx-background-color: ffffff00;" />
+                  <Button layoutX="410.0" layoutY="210.0" mnemonicParsing="false" onAction="#onBtn7Click" prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: BLACK; -fx-background-color: ffffff00;" />
+               </children>
+            </TilePane>
+         </children>
+      </Pane>
+   </center>
+</BorderPane>
