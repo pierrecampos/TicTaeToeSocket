@@ -6,29 +6,41 @@ import java.awt.event.KeyListener;
 import java.io.*;
 import java.net.Socket;
 
-public class Client extends JFrame implements KeyListener {
+public class Client_Tests extends JFrame implements KeyListener {
 
+    private static final long serialVersionUID = 1L;
+    private static String name;
     private Socket con;
     private OutputStream oS;
     private Writer oSW;
     private BufferedWriter bW;
-    private static String name;
+    private JPanel pane;
+    private JTextField textField;
 
+    public Client_Tests(String name) {
+        pane = new JPanel();
+        textField = new JTextField(10);
+        textField.addKeyListener(this);
+        pane.add(textField);
 
-    public Client(String name) {
-
+        setContentPane(pane);
+        setLocationRelativeTo(null);
+        setResizable(false);
+        setSize(250,300);
+        setVisible(true);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
 
 
     public static void main(String[] args) {
-        Client client = new Client(args[0]);
+        Client_Tests client = new Client_Tests(args[0]);
         client.connectToServer();
         client.listenMessages();
     }
 
     private void connectToServer() {
         try {
-            con = new Socket("localhost", 12345);
+            con = new Socket("localhost", 12344);
             oS = con.getOutputStream();
             oSW = new OutputStreamWriter(oS);
             bW = new BufferedWriter(oSW);
@@ -48,7 +60,7 @@ public class Client extends JFrame implements KeyListener {
             while (true) {
                 if (bR.ready()) {
                     msg = bR.readLine();
-
+                    System.out.println("OUVINDO " + msg);
                 }
             }
 
@@ -67,7 +79,6 @@ public class Client extends JFrame implements KeyListener {
 
     }
 
-
     @Override
     public void keyTyped(KeyEvent e) {
 
@@ -75,10 +86,9 @@ public class Client extends JFrame implements KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-
+        if(e.getKeyCode() == KeyEvent.VK_ENTER){
+            sendMessage("OK");
         }
-
     }
 
     @Override
