@@ -19,17 +19,23 @@ public class HostDialogController {
     @FXML
     private TextField txtIp;
 
+    private Server server;
+
 
     @FXML
-    private void onBtnHostClick(ActionEvent event){
+    private void onBtnHostClick(ActionEvent event) {
         int port = Integer.parseInt(txtPort.getText());
-        Thread localServer = new Thread(new Server(port));
-        localServer.start();
+        server = new Server(port);
+        new Thread(server).start();
     }
 
     @FXML
     private void onBtnCloseClick(ActionEvent event) {
         Stage currentStage = Utils.currentStage(event);
+        close(currentStage);
+    }
+
+    private void close(Stage currentStage) {
         currentStage.close();
     }
 

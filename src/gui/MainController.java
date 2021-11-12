@@ -18,6 +18,7 @@ import util.Utils;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.function.Consumer;
 
 public class MainController implements Initializable {
 
@@ -34,32 +35,36 @@ public class MainController implements Initializable {
 
     @FXML
     private void onBtnConnectClick(ActionEvent event) {
+        Stage parentStage = Utils.currentStage(event);
+        createDialogForm("/gui/ConnectDialog.fxml", parentStage, (ConnectDialogController controller) -> {
+            controller.setPlayer(player);
+        });
     }
 
     @FXML
     private void onBtnHostGameClick(ActionEvent event) {
         Stage parentStage = Utils.currentStage(event);
-        createDialogForm("/gui/HostDialog.fxml", parentStage);
+        createDialogForm("/gui/HostDialog.fxml", parentStage, (HostDialogController controller) -> {
+        });
     }
 
-
-    private void createDialogForm(String absoluteName, Stage parentStage) {
+    private <T> void createDialogForm(String absoluteName, Stage parentStage, Consumer<T> initializeController) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
             Pane pane = loader.load();
-            HostDialogController controller = loader.getController();
             Stage dialogStage = new Stage();
             dialogStage.setScene(new Scene(pane));
             dialogStage.setResizable(false);
             dialogStage.initStyle(StageStyle.TRANSPARENT);
             dialogStage.initModality(Modality.WINDOW_MODAL);
             dialogStage.initOwner(parentStage);
+            T controller = loader.getController();
+            initializeController.accept(controller);
             dialogStage.showAndWait();
 
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     @Override

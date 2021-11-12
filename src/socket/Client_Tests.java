@@ -40,7 +40,7 @@ public class Client_Tests extends JFrame implements KeyListener {
 
     private void connectToServer() {
         try {
-            con = new Socket("localhost", 12344);
+            con = new Socket("localhost", 12345);
             oS = con.getOutputStream();
             oSW = new OutputStreamWriter(oS);
             bW = new BufferedWriter(oSW);

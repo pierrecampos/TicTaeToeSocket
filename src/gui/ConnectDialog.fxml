@@ -8,13 +8,13 @@
 
 <AnchorPane prefHeight="300.0" prefWidth="300.0" style="-fx-background-color: #fffcf2; -fx-background-radius: 30;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.ConnectDialogController">
     <children>
-        <TextField fx:id="txtPort" layoutX="76.0" layoutY="138.0" promptText="IP do host" />
-        <Button fx:id="btnBack" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#onBtnCloseClick" style="-fx-background-color: #ffffff00;" text="←">
+        <TextField fx:id="txtIp" layoutX="76.0" layoutY="138.0" promptText="IP do host" />
+        <Button layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#onBtnCloseClick" style="-fx-background-color: #ffffff00;" text="←">
             <font>
                 <Font name="System Bold" size="24.0" />
             </font>
         </Button>
-        <TextField fx:id="txtIp" layoutX="76.0" layoutY="181.0" promptText="Porta" />
+        <TextField fx:id="txtPort" layoutX="76.0" layoutY="181.0" promptText="Porta" />
         <Button layoutX="110.0" layoutY="227.0" mnemonicParsing="false" onAction="#onBtnConnectClick" prefHeight="28.0" prefWidth="80.0" style="-fx-background-color: #403d39;" text="Conectar" textFill="WHITE" />
         <Label layoutX="29.0" layoutY="58.0" text="Conectar em um jogo" textFill="#eb5e28">
             <font>
