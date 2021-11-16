@@ -17,7 +17,7 @@ public class Client_Tests extends JFrame implements KeyListener {
     private JPanel pane;
     private JTextField textField;
 
-    public Client_Tests(String name) {
+    public Client_Tests() {
         pane = new JPanel();
         textField = new JTextField(10);
         textField.addKeyListener(this);
@@ -33,7 +33,7 @@ public class Client_Tests extends JFrame implements KeyListener {
 
 
     public static void main(String[] args) {
-        Client_Tests client = new Client_Tests(args[0]);
+        Client_Tests client = new Client_Tests();
         client.connectToServer();
         client.listenMessages();
     }

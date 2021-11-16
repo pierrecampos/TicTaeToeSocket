@@ -1,11 +1,13 @@
 package model.entities;
 
-import java.net.Socket;
+import model.services.PlayerService;
 
 public class Player {
     private String name;
-    private Socket socket;
+    private PlayerService playerService;
     private Token token;
+    private boolean isHost;
+    private boolean isReady;
 
     public Player(String name) {
         this.name = name;
@@ -19,12 +21,12 @@ public class Player {
         this.name = name;
     }
 
-    public Socket getSocket() {
-        return socket;
+    public PlayerService getPlayerService() {
+        return playerService;
     }
 
-    public void setSocket(Socket socket) {
-        this.socket = socket;
+    public void setPlayerService(PlayerService playerService) {
+        this.playerService = playerService;
     }
 
     public Token getToken() {
@@ -35,8 +37,26 @@ public class Player {
         this.token = token;
     }
 
+    public boolean getIsHost() {
+        return isHost;
+    }
+
+    public void setIsHost(boolean isHost) {
+        this.isHost = isHost;
+    }
+
+    public boolean isReady() {
+        return isReady;
+    }
+
+    public void setReady(boolean ready) {
+        isReady = ready;
+    }
+
     @Override
     public String toString() {
         return name;
     }
+
+
 }

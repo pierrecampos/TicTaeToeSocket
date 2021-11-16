@@ -1,14 +1,12 @@
 package gui;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import model.entities.Player;
 import util.Utils;
-
-import java.io.IOException;
-import java.net.Socket;
 
 public class ConnectDialogController {
 
@@ -19,8 +17,6 @@ public class ConnectDialogController {
     private TextField txtPort;
 
     private Player player;
-
-
 
 
     @FXML
@@ -34,21 +30,28 @@ public class ConnectDialogController {
         close(currentStage);
     }
 
-    private void connectToServer(){
+    private void connectToServer() {
         int port = Integer.parseInt(txtPort.getText());
         String ip = txtIp.getText();
 
-        try {
-            Socket con  = new Socket(ip, port);
-            System.out.println(con == null);
-            player.setSocket(con);
-        } catch (IOException e) {
-            e.printStackTrace();
+        boolean hasConnected = player.getPlayerService().connect(ip, port);
+        if (hasConnected) {
+            player.setReady(hasConnected);
+            gameReady();
         }
-
     }
 
-    public void setPlayer(Player player){
+    public void gameReady() {
+        Stage stage = (Stage) txtIp.getScene().getWindow();
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                close(stage);
+            }
+        });
+    }
+
+    public void setPlayer(Player player) {
         this.player = player;
     }
 
@@ -56,8 +59,6 @@ public class ConnectDialogController {
     private void close(Stage currentStage) {
         currentStage.close();
     }
-
-
 
 
 }

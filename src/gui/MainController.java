@@ -12,7 +12,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import model.entities.Player;
-import socket.Server;
+import model.services.PlayerService;
 import util.Utils;
 
 import java.io.IOException;
@@ -22,14 +22,11 @@ import java.util.function.Consumer;
 
 public class MainController implements Initializable {
 
+    private final Player player;
     @FXML
     private TextField txtPlayer;
 
-    private Player player;
-
-    private static Server server;
-
-    public MainController(){
+    public MainController() {
         player = new Player("Player");
     }
 
@@ -38,6 +35,8 @@ public class MainController implements Initializable {
         Stage parentStage = Utils.currentStage(event);
         createDialogForm("/gui/ConnectDialog.fxml", parentStage, (ConnectDialogController controller) -> {
             controller.setPlayer(player);
+            player.setPlayerService(new PlayerService());
+            player.setIsHost(false);
         });
     }
 
@@ -45,6 +44,9 @@ public class MainController implements Initializable {
     private void onBtnHostGameClick(ActionEvent event) {
         Stage parentStage = Utils.currentStage(event);
         createDialogForm("/gui/HostDialog.fxml", parentStage, (HostDialogController controller) -> {
+            controller.setPlayer(player);
+            player.setPlayerService(new PlayerService());
+            player.setIsHost(true);
         });
     }
 
@@ -62,9 +64,34 @@ public class MainController implements Initializable {
             initializeController.accept(controller);
             dialogStage.showAndWait();
 
+            startGame(parentStage);
+
+
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void startGame(Stage parentStage) {
+
+        if (!player.isReady()) {
+            return;
+        }
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("GameScreen.fxml"));
+            Pane pane = loader.load();
+            GameScreenController controller = loader.getController();
+            controller.setPlayer(player);
+            controller.setAttributes();
+            Scene gameScene = new Scene(pane);
+            parentStage.setScene(gameScene);
+            parentStage.setTitle("Jogo da velha! - " + player.getName());
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     @Override
@@ -84,5 +111,10 @@ public class MainController implements Initializable {
                 player.setName(txtPlayer.getText());
             }
         });
+    }
+
+    @FXML
+    public void debugButton() {
+
     }
 }

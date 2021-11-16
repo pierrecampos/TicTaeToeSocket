@@ -1,7 +1,6 @@
 package socket;
 
 import java.io.*;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.List;
 
@@ -51,11 +50,8 @@ public class PlayerInstance extends Thread {
             if (bW != bWS) {
                 bW.write(name + ": " + msg + "\r\n");
                 bW.flush();
-                System.out.println(msg);
             }
         }
-
     }
-
 
 }

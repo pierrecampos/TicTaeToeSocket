@@ -8,7 +8,7 @@
 
 <AnchorPane prefHeight="300.0" prefWidth="300.0" style="-fx-background-color: #fffcf2; -fx-background-radius: 30;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.HostDialogController">
     <children>
-        <TextField fx:id="txtPort" layoutX="76.0" layoutY="138.0" promptText="Porta" />
+        <TextField fx:id="txtPort" layoutX="76.0" layoutY="138.0" promptText="Porta" text="12345" />
         <Button fx:id="btnBack" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#onBtnCloseClick" style="-fx-background-color: #ffffff00;" text="←">
             <font>
                 <Font name="System Bold" size="24.0" />
