@@ -83,6 +83,7 @@ public class GameScreenController extends Thread implements Initializable {
 
     @Override
     public void run() {
+        sendMessage("");
         listenMessages();
     }
 
@@ -92,9 +93,9 @@ public class GameScreenController extends Thread implements Initializable {
             InputStreamReader iSR = new InputStreamReader(iS);
             BufferedReader bR = new BufferedReader(iSR);
             String msg;
-            System.out.println("Ouvindo");
             while (true) {
                 if (bR.ready()) {
+
                     msg = bR.readLine();
 
                     Platform.runLater(new Runnable() {
