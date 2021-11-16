@@ -1,16 +1,21 @@
 package gui;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import model.entities.Player;
 
 import java.io.*;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class GameScreenController implements Initializable {
+public class GameScreenController extends Thread implements Initializable {
+
     private static final long serialVersionUID = 1L;
+    @FXML
+    private Button btn0;
     private Player player;
     private OutputStream oS;
     private Writer oSW;
@@ -19,7 +24,8 @@ public class GameScreenController implements Initializable {
 
     @FXML
     private void onBtn1Click(ActionEvent event) {
-        sendMessage(player.getName() + "- Teste");
+        System.out.println(player.getName() + " - Clicou no botão");
+        sendMessage("0");
     }
 
     @FXML
@@ -75,6 +81,11 @@ public class GameScreenController implements Initializable {
         }
     }
 
+    @Override
+    public void run() {
+        listenMessages();
+    }
+
     public void listenMessages() {
         try {
             InputStream iS = player.getPlayerService().getCon().getInputStream();
@@ -85,6 +96,17 @@ public class GameScreenController implements Initializable {
             while (true) {
                 if (bR.ready()) {
                     msg = bR.readLine();
+
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            btn0.setText("X");
+                        }
+                    });
+
+
+
+
                     System.out.println("OUVINDO " + msg);
                 }
             }
@@ -104,6 +126,8 @@ public class GameScreenController implements Initializable {
             oS = player.getPlayerService().getCon().getOutputStream();
             oSW = new OutputStreamWriter(oS);
             bW = new BufferedWriter(oSW);
+            start();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
