@@ -8,6 +8,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import model.entities.Player;
+import model.entities.Token;
 import model.listeners.GameReadyListener;
 import socket.Server;
 import util.Utils;
@@ -38,6 +39,7 @@ public class HostDialogController implements Initializable, GameReadyListener {
         if (hostStarted) {
             String ip = txtIp.getText();
             boolean hasConnected = player.getPlayerService().connect(ip, port);
+            player.setToken(Token.CROSS);
             player.setReady(hasConnected);
         }
     }
@@ -62,7 +64,6 @@ public class HostDialogController implements Initializable, GameReadyListener {
     }
 
     private void close(Stage currentStage) {
-
         currentStage.close();
     }
 

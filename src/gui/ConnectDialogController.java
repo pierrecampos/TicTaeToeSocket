@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import model.entities.Player;
+import model.entities.Token;
 import util.Utils;
 
 public class ConnectDialogController {
@@ -37,6 +38,7 @@ public class ConnectDialogController {
         boolean hasConnected = player.getPlayerService().connect(ip, port);
         if (hasConnected) {
             player.setReady(hasConnected);
+            player.setToken(Token.CIRCLE);
             gameReady();
         }
     }

@@ -10,20 +10,44 @@
    <center>
       <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="600.0" BorderPane.alignment="CENTER">
          <children>
-            <TilePane prefHeight="600.0" prefWidth="600.0">
+            <TilePane fx:id="tilePane" prefHeight="600.0" prefWidth="600.0">
                <children>
-                  <Button fx:id="btn0" mnemonicParsing="false" onAction="#onBtn1Click" prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: BLACK; -fx-background-color: ffffff00;" textAlignment="CENTER">
+                  <Button mnemonicParsing="false" prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: BLACK; -fx-background-color: ffffff00;" textAlignment="CENTER">
                      <font>
-                        <Font size="36.0" />
+                        <Font size="72.0" />
                      </font></Button>
-                  <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#onBtn2Click" prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: BLACK; -fx-background-color: ffffff00;" />
-                  <Button layoutX="210.0" layoutY="10.0" mnemonicParsing="false" onAction="#onBtn3Click" prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: BLACK; -fx-background-color: ffffff00;" />
-                  <Button layoutX="410.0" layoutY="10.0" mnemonicParsing="false" onAction="#onBtn4Click" prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: BLACK; -fx-background-color: ffffff00;" />
-                  <Button layoutX="210.0" layoutY="210.0" mnemonicParsing="false" onAction="#onBtn6Click" prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: BLACK; -fx-background-color: ffffff00;" />
-                  <Button layoutX="10.0" layoutY="410.0" mnemonicParsing="false" onAction="#onBtn8Click" prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: BLACK; -fx-background-color: ffffff00;" />
-                  <Button layoutX="10.0" layoutY="210.0" mnemonicParsing="false" onAction="#onBtn5Click" prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: BLACK; -fx-background-color: ffffff00;" />
-                  <Button layoutX="210.0" layoutY="410.0" mnemonicParsing="false" onAction="#onBtn9Click" prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: BLACK; -fx-background-color: ffffff00;" />
-                  <Button layoutX="410.0" layoutY="210.0" mnemonicParsing="false" onAction="#onBtn7Click" prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: BLACK; -fx-background-color: ffffff00;" />
+                  <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: BLACK; -fx-background-color: ffffff00;">
+                     <font>
+                        <Font size="72.0" />
+                     </font></Button>
+                  <Button layoutX="210.0" layoutY="10.0" mnemonicParsing="false" prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: BLACK; -fx-background-color: ffffff00;">
+                     <font>
+                        <Font size="72.0" />
+                     </font></Button>
+                  <Button layoutX="410.0" layoutY="10.0" mnemonicParsing="false" prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: BLACK; -fx-background-color: ffffff00;">
+                     <font>
+                        <Font size="72.0" />
+                     </font></Button>
+                  <Button layoutX="210.0" layoutY="210.0" mnemonicParsing="false" prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: BLACK; -fx-background-color: ffffff00;">
+                     <font>
+                        <Font size="72.0" />
+                     </font></Button>
+                  <Button layoutX="10.0" layoutY="410.0" mnemonicParsing="false" prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: BLACK; -fx-background-color: ffffff00;">
+                     <font>
+                        <Font size="72.0" />
+                     </font></Button>
+                  <Button layoutX="10.0" layoutY="210.0" mnemonicParsing="false" prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: BLACK; -fx-background-color: ffffff00;">
+                     <font>
+                        <Font size="72.0" />
+                     </font></Button>
+                  <Button layoutX="210.0" layoutY="410.0" mnemonicParsing="false" prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: BLACK; -fx-background-color: ffffff00;">
+                     <font>
+                        <Font size="72.0" />
+                     </font></Button>
+                  <Button layoutX="410.0" layoutY="210.0" mnemonicParsing="false" prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: BLACK; -fx-background-color: ffffff00;">
+                     <font>
+                        <Font size="72.0" />
+                     </font></Button>
                </children>
             </TilePane>
          </children>

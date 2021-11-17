@@ -4,69 +4,32 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.layout.TilePane;
 import model.entities.Player;
+import model.entities.Token;
 
 import java.io.*;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 public class GameScreenController extends Thread implements Initializable {
 
     private static final long serialVersionUID = 1L;
+
     @FXML
-    private Button btn0;
+    private TilePane tilePane;
+
+    private List<Node> nodes;
     private Player player;
     private OutputStream oS;
     private Writer oSW;
     private BufferedWriter bW;
+    private String playerToken;
 
-
-    @FXML
-    private void onBtn1Click(ActionEvent event) {
-        System.out.println(player.getName() + " - Clicou no botão");
-        sendMessage("0");
-    }
-
-    @FXML
-    private void onBtn2Click(ActionEvent event) {
-
-    }
-
-    @FXML
-    private void onBtn3Click(ActionEvent event) {
-
-    }
-
-    @FXML
-    private void onBtn4Click(ActionEvent event) {
-
-    }
-
-    @FXML
-    private void onBtn5Click(ActionEvent event) {
-
-    }
-
-    @FXML
-    private void onBtn6Click(ActionEvent event) {
-
-    }
-
-    @FXML
-    private void onBtn7Click(ActionEvent event) {
-
-    }
-
-    @FXML
-    private void onBtn8Click(ActionEvent event) {
-
-    }
-
-    @FXML
-    private void onBtn9Click(ActionEvent event) {
-
-    }
 
     public void setPlayer(Player player) {
         this.player = player;
@@ -95,20 +58,15 @@ public class GameScreenController extends Thread implements Initializable {
             String msg;
             while (true) {
                 if (bR.ready()) {
-
                     msg = bR.readLine();
-
+                    String finalMsg = msg;
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
-                            btn0.setText("X");
+                            int index = Integer.parseInt(finalMsg);
+                            draw(index);
                         }
                     });
-
-
-
-
-                    System.out.println("OUVINDO " + msg);
                 }
             }
 
@@ -120,6 +78,30 @@ public class GameScreenController extends Thread implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        nodes = tilePane.getChildren().stream().filter(x -> x instanceof Button).collect(Collectors.toList());
+        initEvents();
+    }
+
+    private void initEvents() {
+        initBoardButtonsEvent();
+    }
+
+    private void initBoardButtonsEvent() {
+        for (Node node : nodes) {
+            Button button = (Button) node;
+            button.setOnAction(this::onButtonBoardClick);
+        }
+    }
+
+    private void onButtonBoardClick(ActionEvent event) {
+        Button clickedButton = (Button) event.getSource();
+        int indexButton = nodes.indexOf(clickedButton);
+        sendMessage(String.valueOf(indexButton));
+    }
+
+    private void draw(int index) {
+        Button button = (Button) nodes.get(index);
+        button.setText(playerToken);
     }
 
     public void setAttributes() {
@@ -127,6 +109,7 @@ public class GameScreenController extends Thread implements Initializable {
             oS = player.getPlayerService().getCon().getOutputStream();
             oSW = new OutputStreamWriter(oS);
             bW = new BufferedWriter(oSW);
+            playerToken = player.getToken().equals(Token.CIRCLE) ? "O" : "X";
             start();
 
         } catch (IOException e) {

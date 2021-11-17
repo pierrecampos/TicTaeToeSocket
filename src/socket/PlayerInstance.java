@@ -48,7 +48,7 @@ public class PlayerInstance extends Thread {
     private void sendMessages(BufferedWriter bWS, String msg) throws IOException {
         for (BufferedWriter bW : clientsWriter) {
             if (bW != bWS) {
-                bW.write(name + ": " + msg + "\r\n");
+                bW.write(msg + "\r\n");
                 bW.flush();
             }
         }

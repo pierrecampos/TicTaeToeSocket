@@ -15,6 +15,7 @@ import model.entities.Player;
 import model.services.PlayerService;
 import util.Utils;
 
+import javax.swing.*;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -114,7 +115,15 @@ public class MainController implements Initializable {
     }
 
     @FXML
-    public void debugButton() {
+    public void debugButton(ActionEvent e) throws IOException {
+        Stage parentStage = Utils.currentStage(e);
 
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("GameScreen.fxml"));
+        Pane pane = loader.load();
+        GameScreenController controller = loader.getController();
+        controller.setPlayer(player);
+        Scene gameScene = new Scene(pane);
+        parentStage.setScene(gameScene);
+        parentStage.setTitle("Jogo da velha! - " + player.getName());
     }
 }
