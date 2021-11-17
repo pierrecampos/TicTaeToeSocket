@@ -71,10 +71,13 @@ public class JogoDaVelha{
         int soma2 = 0;
         int soma3 = 0;
         int soma4 = 0;
+        int primary_sum = 0;
+        int secundary_sum = 0;
+        int primary_sum1 = 0;
+        int secundary_sum1 = 0;
 
         if(sa.equals("O")){
-            int primary_sum = 0;
-            int secundary_sum = 0;
+            
             for(int l = 0; l < 3; l++){
                 for(int c = 0; c < 3; c++){
                     if(tictactoe[l][c].getSymbol().equals("X")){
@@ -94,30 +97,28 @@ public class JogoDaVelha{
                 soma = 0;
                 soma2 = 0;
             }
+
             for(int i = 0; i < 3; i++){
                 if(tictactoe[i][i].getSymbol().equals("X")){
                     primary_sum++;
                 }
-            }
-            if(primary_sum == 3){
-                return "X";
+                if(primary_sum == 3){
+                    return "X";
+                }
             }
 
-            for(int linha = 2; linha >= 0; linha--){
-                for(int coluna = 0; coluna < 3; coluna++){
-                    if(tictactoe[linha][coluna].getSymbol().equals("X")){
-                        secundary_sum++;
-                    }
+            for(int i=2, j=0; i>=0;i--,j++){
+                if(tictactoe[i][j].getSymbol().equals("X")){
+                    secundary_sum++;
                 }
                 if(secundary_sum == 3){
                     return "X";
                 }
             }
+            
             primary_sum = 0;
             secundary_sum = 0;
         }else{
-            int primary_sum = 0;
-            int secundary_sum = 0;
             for(int l = 0; l < 3; l++){
                 for(int c = 0; c < 3; c++){
                     if(tictactoe[l][c].getSymbol().equals("O")){
@@ -139,23 +140,24 @@ public class JogoDaVelha{
             }
             for(int i = 0; i < 3; i++){
                 if(tictactoe[i][i].getSymbol().equals("O")){
-                    primary_sum++;
+                    primary_sum1++;
                 }
-            }
-            if(primary_sum == 3){
-                return "O";
-            }
-            for(int linha = 2; linha >= 0; linha--){
-                for(int coluna = 0; coluna < 3; coluna++){
-                    if(tictactoe[linha][coluna].getSymbol().equals("O")){
-                        secundary_sum++;
-                    }
-                }
-                if(secundary_sum == 3){
+                if(primary_sum1 == 3){
                     return "O";
                 }
             }
-            primary_sum = 0;
+
+
+            for(int i = 2, j=0; i>=0;i--,j++){
+                if(tictactoe[i][j].getSymbol().equals("O")){
+                    secundary_sum1++;
+                }
+                if(secundary_sum1 == 3){
+                    return "O";
+                }
+            }
+            
+            primary_sum1 = 0;
             secundary_sum = 0;
         }
         return "";
