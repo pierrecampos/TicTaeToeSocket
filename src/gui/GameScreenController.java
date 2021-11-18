@@ -8,7 +8,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.layout.TilePane;
 import model.entities.Player;
-import model.entities.Token;
+import model.entities.TicTacToe;
 
 import java.io.*;
 import java.net.URL;
@@ -25,11 +25,16 @@ public class GameScreenController extends Thread implements Initializable {
 
     private List<Node> nodes;
     private Player player;
+    private final TicTacToe game;
+    private boolean myTurn;
+
     private OutputStream oS;
     private Writer oSW;
     private BufferedWriter bW;
-    private String playerToken;
 
+    public GameScreenController() {
+        game = new TicTacToe();
+    }
 
     public void setPlayer(Player player) {
         this.player = player;
@@ -39,6 +44,7 @@ public class GameScreenController extends Thread implements Initializable {
         try {
             bW.write(message + "\r\n");
             bW.flush();
+            myTurn = false;
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -51,6 +57,7 @@ public class GameScreenController extends Thread implements Initializable {
     }
 
     public void listenMessages() {
+        myTurn = player.getIsHost();
         try {
             InputStream iS = player.getPlayerService().getCon().getInputStream();
             InputStreamReader iSR = new InputStreamReader(iS);
@@ -64,14 +71,27 @@ public class GameScreenController extends Thread implements Initializable {
                         @Override
                         public void run() {
                             int index = Integer.parseInt(finalMsg);
-                            draw(index);
+                            int[] fields = transformIndex(index);
+                            game.play(fields[0], fields[1], !player.getToken().value);
+                            draw(index, !player.getToken().value);
                         }
                     });
+                    myTurn = true;
                 }
             }
-
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void debugBoard() {
+        Boolean[][] board = game.getBoard();
+        int row, column = 0, count = 0;
+        for (row = 0; row < 3; row++, count++) {
+            for (column = 0; column < 3; column++, count++) {
+                System.out.print(board[row][column] + "\t");
+            }
+            System.out.println();
         }
     }
 
@@ -94,14 +114,38 @@ public class GameScreenController extends Thread implements Initializable {
     }
 
     private void onButtonBoardClick(ActionEvent event) {
+        if(!myTurn){
+            return;
+        }
         Button clickedButton = (Button) event.getSource();
         int indexButton = nodes.indexOf(clickedButton);
         sendMessage(String.valueOf(indexButton));
+        draw(indexButton, player.getToken().value);
     }
 
-    private void draw(int index) {
+    private int[] transformIndex(int index) {
+        int row, column = 0, count = 0;
+        for (row = 0; row < 3; row++, count++) {
+            for (column = 0; column < 2; column++, count++) {
+                if (count == index) {
+                    break;
+                }
+            }
+            if (count == index) {
+                break;
+            }
+        }
+        int[] fields = new int[2];
+        fields[0] = row;
+        fields[1] = column;
+
+        return fields;
+    }
+
+    private void draw(int index, boolean token) {
         Button button = (Button) nodes.get(index);
-        button.setText(playerToken);
+        String tokenString = token ? "X" : "O";
+        button.setText(tokenString);
     }
 
     public void setAttributes() {
@@ -109,7 +153,6 @@ public class GameScreenController extends Thread implements Initializable {
             oS = player.getPlayerService().getCon().getOutputStream();
             oSW = new OutputStreamWriter(oS);
             bW = new BufferedWriter(oSW);
-            playerToken = player.getToken().equals(Token.CIRCLE) ? "O" : "X";
             start();
 
         } catch (IOException e) {

@@ -1,11 +1,11 @@
 package model.entities;
 
 public enum Token {
-    CROSS((short) 0),
-    CIRCLE((short) 1);
+    CROSS((boolean) true),
+    CIRCLE((boolean) false);
 
-    public short value;
-    Token(short value){
+    public boolean value;
+    Token(boolean value){
         this.value = value;
     }
 }
