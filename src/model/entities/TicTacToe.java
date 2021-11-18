@@ -10,7 +10,11 @@ public class TicTacToe {
     public void play(int row, int column, boolean token){
         board[row][column] = token;
     }
-    
+
+    public boolean validPlay(int row, int column){
+        return board[row][column] == null;
+    }
+
     public Boolean[][] getBoard(){
         return board;
     }

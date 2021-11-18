@@ -19,14 +19,13 @@ import java.util.stream.Collectors;
 public class GameScreenController extends Thread implements Initializable {
 
     private static final long serialVersionUID = 1L;
-
+    private final TicTacToe game;
     @FXML
     private TilePane tilePane;
-
     private List<Node> nodes;
     private Player player;
-    private final TicTacToe game;
     private boolean myTurn;
+
 
     private OutputStream oS;
     private Writer oSW;
@@ -114,13 +113,20 @@ public class GameScreenController extends Thread implements Initializable {
     }
 
     private void onButtonBoardClick(ActionEvent event) {
-        if(!myTurn){
+        if (!myTurn) {
             return;
         }
         Button clickedButton = (Button) event.getSource();
         int indexButton = nodes.indexOf(clickedButton);
-        sendMessage(String.valueOf(indexButton));
-        draw(indexButton, player.getToken().value);
+        if (validPLay(indexButton)) {
+            sendMessage(String.valueOf(indexButton));
+            draw(indexButton, player.getToken().value);
+        }
+    }
+
+    private boolean validPLay(int index) {
+        int[] fields = transformIndex(index);
+        return game.validPlay(fields[0], fields[1]);
     }
 
     private int[] transformIndex(int index) {
