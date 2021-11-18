@@ -21,33 +21,55 @@ public class TicTacToe {
 
 
     public Boolean[][] isWinner(Boolean token) {
-        int sumRow = 0;
-        int sumColumn = 0;
-        Boolean[][] winningFields = new Boolean[3][3];
-        Boolean[][] winningFields2 = new Boolean[3][3];
+        int rowSum = 0;
+        int columnSum = 0;
+        int diagonalPrimarySum = 0;
+        int diagonalSecondarySum = 0;
+        Boolean[][] winningFieldsRow = new Boolean[3][3];
+        Boolean[][] winningFieldsColumn = new Boolean[3][3];
+        Boolean[][] winningFieldsPrimaryDiagonal = new Boolean[3][3];
+        Boolean[][] winningFieldsSecondaryDiagonal = new Boolean[3][3];
         for (int row = 0; row < 3; row++) {
             for (int column = 0; column < 3; column++) {
 
                 if (token.equals(board[row][column])) {
-                    sumRow++;
-                    winningFields[row][column] = token;
+                    rowSum++;
+                    winningFieldsRow[row][column] = true;
                 }
-                if (sumRow == 3) {
-                    return winningFields;
+                if (rowSum == 3) {
+                    return winningFieldsRow;
                 }
 
                 if (token.equals(board[column][row])) {
-                    sumColumn++;
-                    winningFields2[column][row] = token;
+                    columnSum++;
+                    winningFieldsColumn[column][row] = true;
                 }
-                if (sumColumn == 3) {
-                    return winningFields2;
+                if (columnSum == 3) {
+                    return winningFieldsColumn;
+                }
+
+                if (token.equals(board[column][column])) {
+                    diagonalPrimarySum++;
+                    winningFieldsPrimaryDiagonal[column][column] = true;
+                }
+
+                if (diagonalPrimarySum == 3) {
+                    return winningFieldsPrimaryDiagonal;
                 }
             }
-            winningFields = new Boolean[3][3];
-            winningFields2 = new Boolean[3][3];
-            sumRow = 0;
-            sumColumn = 0;
+
+            winningFieldsRow = winningFieldsColumn = winningFieldsPrimaryDiagonal = new Boolean[3][3];
+            rowSum = columnSum = diagonalPrimarySum = 0;
+        }
+
+        for (int row = 2, column = 0; row >= 0; row--, column++) {
+            if (token.equals(board[row][column])) {
+                diagonalSecondarySum++;
+                winningFieldsSecondaryDiagonal[row][column] = true;
+            }
+            if (diagonalSecondarySum == 3) {
+                return winningFieldsSecondaryDiagonal;
+            }
         }
 
         return new Boolean[0][0];

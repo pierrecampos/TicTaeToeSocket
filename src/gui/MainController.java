@@ -87,7 +87,7 @@ public class MainController implements Initializable {
             controller.setAttributes();
             Scene gameScene = new Scene(pane);
             parentStage.setScene(gameScene);
-            parentStage.setTitle("Jogo da velha! - " + player.getName());
+            parentStage.setTitle("Jogo da velha! - " + player.getName() + (player.getIsHost() ? " - Host": ""));
 
         } catch (IOException e) {
             e.printStackTrace();

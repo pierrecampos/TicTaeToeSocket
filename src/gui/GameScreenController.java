@@ -123,7 +123,7 @@ public class GameScreenController extends Thread implements Initializable {
         int indexButton = nodes.indexOf(clickedButton);
         if (validPLay(indexButton)) {
             sendMessage(String.valueOf(indexButton));
-            game.play(fields[0], fields[1], !player.getToken().value);
+            game.play(fields[0], fields[1], player.getToken().value);
             draw(indexButton, player.getToken().value);
         }
     }
