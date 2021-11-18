@@ -25,7 +25,7 @@ public class GameScreenController extends Thread implements Initializable {
     private List<Node> nodes;
     private Player player;
     private boolean myTurn;
-
+    int[] fields;
 
     private OutputStream oS;
     private Writer oSW;
@@ -70,8 +70,9 @@ public class GameScreenController extends Thread implements Initializable {
                         @Override
                         public void run() {
                             int index = Integer.parseInt(finalMsg);
-                            int[] fields = transformIndex(index);
+                            fields = transformIndex(index);
                             game.play(fields[0], fields[1], !player.getToken().value);
+                            debugBoard(game.isWinner(!player.getToken().value));
                             draw(index, !player.getToken().value);
                         }
                     });
@@ -83,12 +84,14 @@ public class GameScreenController extends Thread implements Initializable {
         }
     }
 
-    private void debugBoard() {
-        Boolean[][] board = game.getBoard();
+    private void debugBoard(Boolean[][] matrix) {
+        if(matrix.length == 0){
+            return;
+        }
         int row, column = 0, count = 0;
         for (row = 0; row < 3; row++, count++) {
             for (column = 0; column < 3; column++, count++) {
-                System.out.print(board[row][column] + "\t");
+                System.out.print(matrix[row][column] + "\t");
             }
             System.out.println();
         }
@@ -120,12 +123,13 @@ public class GameScreenController extends Thread implements Initializable {
         int indexButton = nodes.indexOf(clickedButton);
         if (validPLay(indexButton)) {
             sendMessage(String.valueOf(indexButton));
+            game.play(fields[0], fields[1], !player.getToken().value);
             draw(indexButton, player.getToken().value);
         }
     }
 
     private boolean validPLay(int index) {
-        int[] fields = transformIndex(index);
+        fields = transformIndex(index);
         return game.validPlay(fields[0], fields[1]);
     }
 
