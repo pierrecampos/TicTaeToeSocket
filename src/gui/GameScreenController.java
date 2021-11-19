@@ -9,10 +9,10 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.TilePane;
 import model.entities.Player;
 import model.entities.TicTacToe;
+import util.Utils;
 
 import java.io.*;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
@@ -33,6 +33,23 @@ public class GameScreenController extends Thread implements Initializable {
 
     public GameScreenController() {
         game = new TicTacToe();
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        nodes = tilePane.getChildren().stream().filter(x -> x instanceof Button).collect(Collectors.toList());
+        initEvents();
+    }
+
+    private void initEvents() {
+        initBoardButtonsEvent();
+    }
+
+    private void initBoardButtonsEvent() {
+        for (Node node : nodes) {
+            Button button = (Button) node;
+            button.setOnAction(this::onButtonBoardClick);
+        }
     }
 
     public void setPlayer(Player player) {
@@ -68,62 +85,18 @@ public class GameScreenController extends Thread implements Initializable {
                     String finalMsg = msg;
                     Platform.runLater(() -> {
                         int index = Integer.parseInt(finalMsg);
-                        fields = transformIndex(index);
+                        fields = Utils.transformIndex(index);
                         game.play(fields[0], fields[1], !player.getToken().value);
-                        Boolean[][] winningMatrix = game.isWinner(!player.getToken().value);
                         draw(index, !player.getToken().value);
-                        if (hasWinner(winningMatrix, false)) {
-                            System.out.println("Você Perdeu");
-                            myTurn = false;
-                        }
+
+                        Boolean[][] winningMatrix = game.isWinner(!player.getToken().value);
+                        hasWinner(winningMatrix, false);
                     });
                     myTurn = true;
                 }
             }
         } catch (IOException e) {
             e.printStackTrace();
-        }
-    }
-
-
-    private boolean hasWinner(Boolean[][] winningMatrix, boolean token) {
-        if (winningMatrix.length == 0) {
-            return false;
-        }
-
-        List<Integer> indexButtons = transformPosition(winningMatrix);
-        drawWinner(indexButtons, token);
-
-        return true;
-    }
-
-    private List<Integer> transformPosition(Boolean[][] matrix) {
-        int row, column = 0, position = 0;
-        List<Integer> indexButtons = new ArrayList<>();
-        for (row = 0; row < 3; row++) {
-            for (column = 0; column < 3; column++, position++) {
-                if (matrix[row][column] != null) {
-                    indexButtons.add(position);
-                }
-            }
-        }
-        return indexButtons;
-    }
-
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        nodes = tilePane.getChildren().stream().filter(x -> x instanceof Button).collect(Collectors.toList());
-        initEvents();
-    }
-
-    private void initEvents() {
-        initBoardButtonsEvent();
-    }
-
-    private void initBoardButtonsEvent() {
-        for (Node node : nodes) {
-            Button button = (Button) node;
-            button.setOnAction(this::onButtonBoardClick);
         }
     }
 
@@ -137,36 +110,33 @@ public class GameScreenController extends Thread implements Initializable {
             sendMessage(String.valueOf(indexButton));
             game.play(fields[0], fields[1], player.getToken().value);
             draw(indexButton, player.getToken().value);
+
             Boolean[][] winningMatrix = game.isWinner(player.getToken().value);
-            if (hasWinner(winningMatrix, true)) {
-                System.out.println("Você Ganhou");
-                myTurn = false;
-            }
+            hasWinner(winningMatrix, true);
         }
     }
 
     private boolean validPLay(int index) {
-        fields = transformIndex(index);
+        fields = Utils.transformIndex(index);
         return game.validPlay(fields[0], fields[1]);
     }
 
-    private int[] transformIndex(int index) {
-        int row, column = 0, count = 0;
-        for (row = 0; row < 3; row++, count++) {
-            for (column = 0; column < 2; column++, count++) {
-                if (count == index) {
-                    break;
-                }
-            }
-            if (count == index) {
-                break;
-            }
+    private boolean hasWinner(Boolean[][] winningMatrix, boolean winner) {
+        if (winningMatrix.length == 0) {
+            return false;
         }
-        int[] fields = new int[2];
-        fields[0] = row;
-        fields[1] = column;
 
-        return fields;
+        List<Integer> indexButtons = Utils.transformPosition(winningMatrix);
+        drawWinner(indexButtons, winner);
+        myTurn = false;
+        rematch(winner);
+
+        return true;
+    }
+
+    private void rematch(boolean winner) {
+        String answer = "Você " + (winner ? "Ganhou" : "Perdeu");
+        System.out.println(answer);
     }
 
 
@@ -183,7 +153,6 @@ public class GameScreenController extends Thread implements Initializable {
             if (indexButtons.contains(nodes.indexOf(btn))) {
                 btn.setStyle(color);
             }
-
         }
     }
 
