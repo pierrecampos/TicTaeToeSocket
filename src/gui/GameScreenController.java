@@ -12,6 +12,7 @@ import model.entities.TicTacToe;
 
 import java.io.*;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
@@ -20,13 +21,12 @@ public class GameScreenController extends Thread implements Initializable {
 
     private static final long serialVersionUID = 1L;
     private final TicTacToe game;
+    private int[] fields;
     @FXML
     private TilePane tilePane;
     private List<Node> nodes;
     private Player player;
     private boolean myTurn;
-    int[] fields;
-
     private OutputStream oS;
     private Writer oSW;
     private BufferedWriter bW;
@@ -66,14 +66,15 @@ public class GameScreenController extends Thread implements Initializable {
                 if (bR.ready()) {
                     msg = bR.readLine();
                     String finalMsg = msg;
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            int index = Integer.parseInt(finalMsg);
-                            fields = transformIndex(index);
-                            game.play(fields[0], fields[1], !player.getToken().value);
-                            debugBoard(game.isWinner(!player.getToken().value));
-                            draw(index, !player.getToken().value);
+                    Platform.runLater(() -> {
+                        int index = Integer.parseInt(finalMsg);
+                        fields = transformIndex(index);
+                        game.play(fields[0], fields[1], !player.getToken().value);
+                        Boolean[][] winningMatrix = game.isWinner(!player.getToken().value);
+                        draw(index, !player.getToken().value);
+                        if (hasWinner(winningMatrix, false)) {
+                            System.out.println("Você Perdeu");
+                            myTurn = false;
                         }
                     });
                     myTurn = true;
@@ -84,19 +85,30 @@ public class GameScreenController extends Thread implements Initializable {
         }
     }
 
-    private void debugBoard(Boolean[][] matrix) {
-        if(matrix.length == 0){
-            return;
+
+    private boolean hasWinner(Boolean[][] winningMatrix, boolean token) {
+        if (winningMatrix.length == 0) {
+            return false;
         }
-        int row, column = 0, count = 0;
-        for (row = 0; row < 3; row++, count++) {
-            for (column = 0; column < 3; column++, count++) {
-                System.out.print(matrix[row][column] + "\t");
-            }
-            System.out.println();
-        }
+
+        List<Integer> indexButtons = transformPosition(winningMatrix);
+        drawWinner(indexButtons, token);
+
+        return true;
     }
 
+    private List<Integer> transformPosition(Boolean[][] matrix) {
+        int row, column = 0, position = 0;
+        List<Integer> indexButtons = new ArrayList<>();
+        for (row = 0; row < 3; row++) {
+            for (column = 0; column < 3; column++, position++) {
+                if (matrix[row][column] != null) {
+                    indexButtons.add(position);
+                }
+            }
+        }
+        return indexButtons;
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -125,6 +137,11 @@ public class GameScreenController extends Thread implements Initializable {
             sendMessage(String.valueOf(indexButton));
             game.play(fields[0], fields[1], player.getToken().value);
             draw(indexButton, player.getToken().value);
+            Boolean[][] winningMatrix = game.isWinner(player.getToken().value);
+            if (hasWinner(winningMatrix, true)) {
+                System.out.println("Você Ganhou");
+                myTurn = false;
+            }
         }
     }
 
@@ -152,10 +169,22 @@ public class GameScreenController extends Thread implements Initializable {
         return fields;
     }
 
+
     private void draw(int index, boolean token) {
         Button button = (Button) nodes.get(index);
         String tokenString = token ? "X" : "O";
         button.setText(tokenString);
+    }
+
+    private void drawWinner(List<Integer> indexButtons, boolean winner) {
+        String color = "-fx-background-color: " + (winner ? "#60D394;" : "#EE6055;");
+        for (Node button : nodes) {
+            Button btn = (Button) button;
+            if (indexButtons.contains(nodes.indexOf(btn))) {
+                btn.setStyle(color);
+            }
+
+        }
     }
 
     public void setAttributes() {
