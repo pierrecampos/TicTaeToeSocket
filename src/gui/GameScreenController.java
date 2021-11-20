@@ -6,7 +6,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.layout.TilePane;
+import javafx.scene.layout.Pane;
 import model.entities.Player;
 import model.entities.TicTacToe;
 import util.Utils;
@@ -23,7 +23,7 @@ public class GameScreenController extends Thread implements Initializable {
     private final TicTacToe game;
     private int[] fields;
     @FXML
-    private TilePane tilePane;
+    private Pane pane;
     private List<Node> nodes;
     private Player player;
     private boolean myTurn;
@@ -37,7 +37,7 @@ public class GameScreenController extends Thread implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        nodes = tilePane.getChildren().stream().filter(x -> x instanceof Button).collect(Collectors.toList());
+        nodes = pane.getChildren().stream().filter(x -> x instanceof Button).collect(Collectors.toList());
         initEvents();
     }
 
