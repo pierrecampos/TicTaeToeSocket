@@ -25,7 +25,7 @@
         </Label>
       <ImageView fitHeight="51.0" fitWidth="53.0" layoutX="199.0" layoutY="58.0">
          <image>
-            <Image url="@../../../Downloads/Logos/tic-tac-toe%20(3).png" />
+            <Image url="@imgs/tic-tac-toe64x64.png" />
          </image>
       </ImageView>
     </children>

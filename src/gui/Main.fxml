@@ -16,7 +16,7 @@
         <HBox alignment="BOTTOM_RIGHT" BorderPane.alignment="CENTER" />
     </top>
    <center>
-      <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+      <AnchorPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #fffcf2;" BorderPane.alignment="CENTER">
          <children>
             <Button layoutX="226.0" layoutY="266.0" mnemonicParsing="false" onAction="#onBtnConnectClick" prefHeight="28.0" prefWidth="148.0" style="-fx-background-color: #403d39;" text="Conectar" textFill="WHITE">
                <effect>
@@ -31,7 +31,7 @@
             <TextField fx:id="txtPlayer" layoutX="102.0" layoutY="188.0" prefHeight="25.0" prefWidth="377.0" promptText="nickname" />
             <ImageView layoutX="415.0" layoutY="62.0">
                <image>
-                  <Image url="@../../../Downloads/Logos/tic-tac-toe%20(3).png" />
+                  <Image url="@imgs/tic-tac-toe64x64.png" />
                </image>
             </ImageView>
             <Label alignment="CENTER" layoutX="168.0" layoutY="65.0" prefHeight="58.0" prefWidth="237.0" text="Jogo da Velha" textFill="#eb5e28">
