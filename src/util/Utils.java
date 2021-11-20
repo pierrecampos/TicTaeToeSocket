@@ -1,11 +1,15 @@
 package util;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 public class Utils {
@@ -44,4 +48,14 @@ public class Utils {
         }
         return indexButtons;
     }
+
+    public static Optional<ButtonType> showConfirmation(String title, String content) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        return alert.showAndWait();
+    }
+
+
 }

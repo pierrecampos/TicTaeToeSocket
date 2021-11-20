@@ -3,10 +3,13 @@ package gui;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
 import model.entities.Player;
 import model.entities.TicTacToe;
 import util.Utils;
@@ -15,6 +18,7 @@ import java.io.*;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 public class GameScreenController extends Thread implements Initializable {
@@ -24,7 +28,7 @@ public class GameScreenController extends Thread implements Initializable {
     private int[] fields;
     @FXML
     private Pane pane;
-    private List<Node> nodes;
+    private List<Node> buttons;
     private Player player;
     private boolean myTurn;
     private OutputStream oS;
@@ -37,7 +41,7 @@ public class GameScreenController extends Thread implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        nodes = pane.getChildren().stream().filter(x -> x instanceof Button).collect(Collectors.toList());
+        buttons = pane.getChildren().stream().filter(x -> x instanceof Button).collect(Collectors.toList());
         initEvents();
     }
 
@@ -46,8 +50,8 @@ public class GameScreenController extends Thread implements Initializable {
     }
 
     private void initBoardButtonsEvent() {
-        for (Node node : nodes) {
-            Button button = (Button) node;
+        for (Node currentBtn : buttons) {
+            Button button = (Button) currentBtn;
             button.setOnAction(this::onButtonBoardClick);
         }
     }
@@ -79,7 +83,8 @@ public class GameScreenController extends Thread implements Initializable {
             InputStreamReader iSR = new InputStreamReader(iS);
             BufferedReader bR = new BufferedReader(iSR);
             String msg;
-            while (true) {
+            AtomicBoolean continueGame = new AtomicBoolean(true);
+            while (continueGame.get()) {
                 if (bR.ready()) {
                     msg = bR.readLine();
                     String finalMsg = msg;
@@ -90,11 +95,12 @@ public class GameScreenController extends Thread implements Initializable {
                         draw(index, !player.getToken().value);
 
                         Boolean[][] winningMatrix = game.isWinner(!player.getToken().value);
-                        hasWinner(winningMatrix, false);
+                        continueGame.set(!hasWinner(winningMatrix, false));
                     });
                     myTurn = true;
                 }
             }
+            rematch(false);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -105,14 +111,16 @@ public class GameScreenController extends Thread implements Initializable {
             return;
         }
         Button clickedButton = (Button) event.getSource();
-        int indexButton = nodes.indexOf(clickedButton);
+        int indexButton = buttons.indexOf(clickedButton);
         if (validPLay(indexButton)) {
             sendMessage(String.valueOf(indexButton));
             game.play(fields[0], fields[1], player.getToken().value);
             draw(indexButton, player.getToken().value);
 
             Boolean[][] winningMatrix = game.isWinner(player.getToken().value);
-            hasWinner(winningMatrix, true);
+            if (hasWinner(winningMatrix, true)) {
+                rematch(true);
+            }
         }
     }
 
@@ -129,28 +137,41 @@ public class GameScreenController extends Thread implements Initializable {
         List<Integer> indexButtons = Utils.transformPosition(winningMatrix);
         drawWinner(indexButtons, winner);
         myTurn = false;
-        rematch(winner);
 
         return true;
     }
 
     private void rematch(boolean winner) {
         String answer = "Você " + (winner ? "Ganhou" : "Perdeu");
-        System.out.println(answer);
+        Platform.runLater(() -> {
+            Utils.showConfirmation("Fim de Jogo", answer);
+
+            //Apenas para debug - REFATORAR
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("Main.fxml"));
+                Pane p = loader.load();
+                MainController controller = loader.getController();
+                Scene gameScene = new Scene(p);
+                Stage stage = (Stage) pane.getScene().getWindow();
+                stage.setScene(gameScene);
+                stage.setTitle("Jogo da velha! - " + player.getName() + (player.getIsHost() ? " - Host" : ""));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
-
     private void draw(int index, boolean token) {
-        Button button = (Button) nodes.get(index);
+        Button button = (Button) buttons.get(index);
         String tokenString = token ? "X" : "O";
         button.setText(tokenString);
     }
 
     private void drawWinner(List<Integer> indexButtons, boolean winner) {
         String color = "-fx-background-color: " + (winner ? "#60D394;" : "#EE6055;");
-        for (Node button : nodes) {
+        for (Node button : buttons) {
             Button btn = (Button) button;
-            if (indexButtons.contains(nodes.indexOf(btn))) {
+            if (indexButtons.contains(buttons.indexOf(btn))) {
                 btn.setStyle(color);
             }
         }

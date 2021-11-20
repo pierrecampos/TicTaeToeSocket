@@ -37,6 +37,9 @@ public class PlayerInstance extends Thread {
             msg = name = bR.readLine();
             while (msg != null) {
                 msg = bR.readLine();
+                if (msg == null) {
+                    continue;
+                }
                 sendMessages(bW, msg);
             }
 
