@@ -8,42 +8,77 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #fffcf2;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.GameScreenController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="800.0" style="-fx-background-color: #fffcf2;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.GameScreenController">
    <center>
-      <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="400.0" BorderPane.alignment="CENTER">
+      <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="500.0" BorderPane.alignment="CENTER">
          <children>
-            <Button maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" prefHeight="130.0" prefWidth="130.0" style="-fx-background-color: #ffffff00;" />
-            <Button layoutX="135.0" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" prefHeight="130.0" prefWidth="130.0" style="-fx-background-color: #ffffff00;" />
-            <Button layoutX="270.0" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" prefHeight="130.0" prefWidth="130.0" style="-fx-background-color: #ffffff00;" />
-            <Button layoutY="135.0" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" prefHeight="130.0" prefWidth="130.0" style="-fx-background-color: #ffffff00;" />
-            <Button layoutY="270.0" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" prefHeight="130.0" prefWidth="130.0" style="-fx-background-color: #ffffff00;" />
-            <Button layoutX="135.0" layoutY="135.0" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" prefHeight="130.0" prefWidth="130.0" style="-fx-background-color: #ffffff00;" />
-            <Button layoutX="270.0" layoutY="135.0" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" prefHeight="130.0" prefWidth="130.0" style="-fx-background-color: #ffffff00;" />
-            <Button layoutX="135.0" layoutY="270.0" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" prefHeight="130.0" prefWidth="130.0" style="-fx-background-color: #ffffff00;" />
-            <Button layoutX="270.0" layoutY="270.0" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" prefHeight="130.0" prefWidth="130.0" style="-fx-background-color: #ffffff00;" />
-            <Line endX="255.0" layoutX="145.0" layoutY="135.0" startX="-145.0" stroke="#403d39" strokeWidth="5.0" />
-            <Line endX="255.0" layoutX="145.0" layoutY="270.0" startX="-145.0" stroke="#403d39" strokeWidth="5.0" />
-            <Line endX="-22.0" endY="256.0" layoutX="155.0" layoutY="145.0" startX="-22.0" startY="-144.0" stroke="#eb5e28" strokeWidth="5.0" />
-            <Line endX="-22.0" endY="256.0" layoutX="287.0" layoutY="145.0" startX="-22.0" startY="-144.0" stroke="#eb5e28" strokeWidth="5.0" />
+            <Button maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" prefHeight="160.0" prefWidth="160.0" style="-fx-background-color: ffffff00;" text="X">
+               <font>
+                  <Font name="System Bold" size="64.0" />
+               </font></Button>
+            <Line endX="352.0" endY="17.0" layoutX="143.0" layoutY="149.0" startX="-138.0" startY="17.0" stroke="#403d39" strokeWidth="11.0" />
+            <Line endX="352.0" layoutX="144.0" layoutY="338.0" startX="-138.0" stroke="#403d39" strokeWidth="11.0" />
+            <Line endX="-9.0" endY="305.0" layoutX="344.0" layoutY="195.0" startX="-9.0" startY="-190.0" stroke="#eb5e28" strokeWidth="11.0" />
+            <Button layoutX="170.0" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" prefHeight="160.0" prefWidth="160.0" style="-fx-background-color: ffffff00;" text="X">
+               <font>
+                  <Font name="System Bold" size="64.0" />
+               </font>
+            </Button>
+            <Button layoutX="340.0" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" prefHeight="160.0" prefWidth="160.0" style="-fx-background-color: ffffff00;" text="X">
+               <font>
+                  <Font name="System Bold" size="64.0" />
+               </font>
+            </Button>
+            <Line endX="-13.0" endY="305.0" layoutX="177.0" layoutY="195.0" startX="-13.0" startY="-190.0" stroke="#eb5e28" strokeWidth="11.0" />
+            <Button layoutY="171.0" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" prefHeight="160.0" prefWidth="160.0" style="-fx-background-color: ffffff00;" text="X">
+               <font>
+                  <Font name="System Bold" size="64.0" />
+               </font>
+            </Button>
+            <Button layoutX="170.0" layoutY="171.0" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" prefHeight="160.0" prefWidth="160.0" style="-fx-background-color: ffffff00;" text="X">
+               <font>
+                  <Font name="System Bold" size="64.0" />
+               </font>
+            </Button>
+            <Button layoutX="340.0" layoutY="172.0" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" prefHeight="160.0" prefWidth="160.0" style="-fx-background-color: ffffff00;" text="O">
+               <font>
+                  <Font name="System Bold" size="64.0" />
+               </font>
+            </Button>
+            <Button layoutY="344.0" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" prefHeight="160.0" prefWidth="160.0" style="-fx-background-color: ffffff00;" text="X">
+               <font>
+                  <Font name="System Bold" size="64.0" />
+               </font>
+            </Button>
+            <Button layoutX="170.0" layoutY="344.0" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" prefHeight="160.0" prefWidth="160.0" style="-fx-background-color: ffffff00;" text="X">
+               <font>
+                  <Font name="System Bold" size="64.0" />
+               </font>
+            </Button>
+            <Button layoutX="340.0" layoutY="344.0" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" prefHeight="160.0" prefWidth="160.0" style="-fx-background-color: ffffff00;" text="X">
+               <font>
+                  <Font name="System Bold" size="64.0" />
+               </font>
+            </Button>
          </children>
       </Pane>
    </center>
    <top>
-      <Pane maxHeight="-Infinity" prefHeight="120.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+      <Pane maxHeight="-Infinity" prefHeight="80.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <ImageView fitHeight="50.0" fitWidth="50.0" layoutX="40.0" layoutY="35.0" pickOnBounds="true" preserveRatio="true" />
-            <ImageView fitHeight="50.0" fitWidth="50.0" layoutX="710.0" layoutY="35.0" pickOnBounds="true" preserveRatio="true" />
-            <Label layoutX="101.0" layoutY="47.0" text="Player 1" textFill="#403d39">
+            <ImageView fitHeight="50.0" fitWidth="50.0" layoutX="94.0" layoutY="30.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fitHeight="50.0" fitWidth="50.0" layoutX="661.0" layoutY="30.0" pickOnBounds="true" preserveRatio="true" />
+            <Label layoutX="152.0" layoutY="42.0" text="Player 1" textFill="#403d39">
                <font>
                   <Font size="18.0" />
                </font>
             </Label>
-            <Label layoutX="637.0" layoutY="47.0" text="Player 2" textFill="#403d39">
+            <Label layoutX="582.0" layoutY="41.0" text="Player 2" textFill="#403d39">
                <font>
                   <Font size="18.0" />
                </font>
             </Label>
-            <Label layoutX="379.0" layoutY="34.0" text="VS" textFill="#eb5e28">
+            <Label layoutX="378.0" layoutY="28.0" text="VS" textFill="#eb5e28">
                <font>
                   <Font name="System Bold" size="36.0" />
                </font>
@@ -51,4 +86,7 @@
          </children>
       </Pane>
    </top>
+   <bottom>
+      <Pane maxHeight="-Infinity" prefHeight="50.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+   </bottom>
 </BorderPane>
