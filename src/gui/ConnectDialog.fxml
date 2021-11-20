@@ -3,6 +3,8 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
@@ -14,12 +16,17 @@
                 <Font name="System Bold" size="24.0" />
             </font>
         </Button>
-        <TextField fx:id="txtPort" layoutX="76.0" layoutY="181.0" promptText="Porta" text="12345" />
-        <Button layoutX="110.0" layoutY="227.0" mnemonicParsing="false" onAction="#onBtnConnectClick" prefHeight="28.0" prefWidth="80.0" style="-fx-background-color: #403d39;" text="Conectar" textFill="WHITE" />
-        <Label layoutX="29.0" layoutY="58.0" text="Conectar em um jogo" textFill="#eb5e28">
+        <TextField fx:id="txtPort" layoutX="76.0" layoutY="182.0" promptText="Porta" text="12345" />
+        <Button layoutX="110.0" layoutY="235.0" mnemonicParsing="false" onAction="#onBtnConnectClick" prefHeight="28.0" prefWidth="80.0" style="-fx-background-color: #403d39;" text="Conectar" textFill="WHITE" />
+        <Label alignment="CENTER" layoutX="41.0" layoutY="58.0" prefHeight="64.0" prefWidth="149.0" text="Conectar" textFill="#eb5e28">
             <font>
-                <Font name="System Bold" size="24.0" />
+                <Font name="System Bold" size="33.0" />
             </font>
         </Label>
+      <ImageView fitHeight="51.0" fitWidth="53.0" layoutX="199.0" layoutY="65.0">
+         <image>
+            <Image url="@../../../Downloads/Logos/tic-tac-toe%20(3).png" />
+         </image>
+      </ImageView>
     </children>
 </AnchorPane>
