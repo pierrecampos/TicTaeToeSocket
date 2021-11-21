@@ -12,6 +12,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import model.entities.Player;
 import model.entities.TicTacToe;
+import socket.Server;
 import util.Utils;
 
 import java.io.*;
@@ -137,9 +138,19 @@ public class GameScreenController extends Thread implements Initializable {
         List<Integer> indexButtons = Utils.transformPosition(winningMatrix);
         drawWinner(indexButtons, winner);
         myTurn = false;
-
+        player.getPlayerService().closeSocket();
+        closeServer();
         return true;
     }
+
+    private void closeServer() {
+        Server server = player.getServer();
+        if (server != null) {
+            server.closeServer();
+            server.interrupt();
+        }
+    }
+
 
     private void rematch(boolean winner) {
         String answer = "Você " + (winner ? "Ganhou" : "Perdeu");

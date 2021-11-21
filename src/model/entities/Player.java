@@ -1,11 +1,15 @@
 package model.entities;
 
 import model.services.PlayerService;
+import socket.Server;
 
 public class Player {
     private String name;
     private PlayerService playerService;
     private Token token;
+
+
+    private Server server;
     private boolean isHost;
     private boolean isReady;
 
@@ -35,6 +39,14 @@ public class Player {
 
     public void setToken(Token token) {
         this.token = token;
+    }
+
+    public Server getServer() {
+        return server;
+    }
+
+    public void setServer(Server server) {
+        this.server = server;
     }
 
     public boolean getIsHost() {

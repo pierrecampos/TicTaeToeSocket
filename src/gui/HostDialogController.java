@@ -18,22 +18,18 @@ import java.util.ResourceBundle;
 
 public class HostDialogController implements Initializable, GameReadyListener {
 
-    @FXML
-    private Button btnBack;
-
+    private static Server server;
     @FXML
     private TextField txtPort;
-
     @FXML
     private TextField txtIp;
-
     private Player player;
-
-    private static Server server;
-
 
     @FXML
     private void onBtnHostClick(ActionEvent event) {
+        if (server != null) {
+            server.closeServer();
+        }
         int port = Integer.parseInt(txtPort.getText());
         boolean hostStarted = startHost(port);
         if (hostStarted) {
@@ -41,12 +37,17 @@ public class HostDialogController implements Initializable, GameReadyListener {
             boolean hasConnected = player.getPlayerService().connect(ip, port);
             player.setToken(Token.CROSS);
             player.setReady(hasConnected);
+            player.setServer(server);
         }
     }
 
     @FXML
     private void onBtnCloseClick(ActionEvent event) {
+        player.setReady(false);
         player.getPlayerService().closeSocket();
+        if (server != null) {
+            server.closeServer();
+        }
         Stage currentStage = Utils.currentStage(event);
         close(currentStage);
     }
@@ -70,11 +71,9 @@ public class HostDialogController implements Initializable, GameReadyListener {
     @Override
     public void onGameReady() {
         Stage stage = (Stage) txtIp.getScene().getWindow();
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                close(stage);
-            }
+        Platform.runLater(() -> {
+            close(stage);
+
         });
     }
 

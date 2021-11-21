@@ -15,7 +15,7 @@ public class PlayerService {
             e.printStackTrace();
         }
 
-        return con.isConnected();
+        return con != null;
     }
 
     public void closeSocket() {
