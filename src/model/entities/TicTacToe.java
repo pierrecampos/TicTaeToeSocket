@@ -19,7 +19,7 @@ public class TicTacToe {
         return board;
     }
 
-
+    //Logica do jogo da velha
     public Boolean[][] isWinner(Boolean token) {
         int rowSum = 0;
         int columnSum = 0;
@@ -32,6 +32,7 @@ public class TicTacToe {
         for (int row = 0; row < 3; row++) {
             for (int column = 0; column < 3; column++) {
 
+                // analisa as colunas
                 if (token.equals(board[row][column])) {
                     rowSum++;
                     winningFieldsRow[row][column] = true;
@@ -40,6 +41,7 @@ public class TicTacToe {
                     return winningFieldsRow;
                 }
 
+                //analisa as linhas
                 if (token.equals(board[column][row])) {
                     columnSum++;
                     winningFieldsColumn[column][row] = true;
@@ -48,6 +50,7 @@ public class TicTacToe {
                     return winningFieldsColumn;
                 }
 
+                //analisa a diagonal principal
                 if (token.equals(board[column][column])) {
                     diagonalPrimarySum++;
                     winningFieldsPrimaryDiagonal[column][column] = true;
@@ -62,6 +65,7 @@ public class TicTacToe {
             rowSum = columnSum = diagonalPrimarySum = 0;
         }
 
+        //analisa a diagonal secundaria
         for (int row = 2, column = 0; row >= 0; row--, column++) {
             if (token.equals(board[row][column])) {
                 diagonalSecondarySum++;

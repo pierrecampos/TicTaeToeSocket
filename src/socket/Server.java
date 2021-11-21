@@ -29,6 +29,7 @@ public class Server extends Thread {
             server = new ServerSocket(port);
             clientsWriter = new ArrayList<BufferedWriter>();
 
+            //Aguarda a coneção
             while (alive) {
                 System.out.println("Aguardando conexão...");
                 Socket con = server.accept();
@@ -49,6 +50,7 @@ public class Server extends Thread {
         gameReadyListener.add(listener);
     }
 
+    //Fica analisando se foi feita a coneção
     public void notifyGameReadyListeners() {
         for (GameReadyListener listener : gameReadyListener) {
             listener.onGameReady();
