@@ -7,8 +7,6 @@ public class Player {
     private String name;
     private PlayerService playerService;
     private Token token;
-
-
     private Server server;
     private boolean isHost;
     private boolean isReady;

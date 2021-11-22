@@ -8,6 +8,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import model.entities.Player;
@@ -26,9 +27,14 @@ public class GameScreenController extends Thread implements Initializable {
 
     private static final long serialVersionUID = 1L;
     private final TicTacToe game;
-    private int[] fields;
     @FXML
     private Pane pane;
+    @FXML
+    private Label player1Name;
+    @FXML
+    private Label player2Name;
+
+    private int[] fields;
     private List<Node> buttons;
     private Player player;
     private boolean myTurn;
@@ -85,6 +91,7 @@ public class GameScreenController extends Thread implements Initializable {
             BufferedReader bR = new BufferedReader(iSR);
             String msg;
             AtomicBoolean continueGame = new AtomicBoolean(true);
+            setOpponentName(bR);
             while (continueGame.get()) {
                 if (bR.ready()) {
                     msg = bR.readLine();
@@ -105,6 +112,22 @@ public class GameScreenController extends Thread implements Initializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void setOpponentName(BufferedReader bR) throws IOException {
+        sendMessage(player.getName());
+        String opponentName = bR.readLine();
+
+        Platform.runLater(() -> {
+            if (player.getIsHost()) {
+                player1Name.setText(player.getName());
+                player2Name.setText(opponentName);
+            } else {
+                player1Name.setText(opponentName);
+                player2Name.setText(player.getName());
+            }
+            myTurn = player.getIsHost();
+        });
     }
 
     private void onButtonBoardClick(ActionEvent event) {
