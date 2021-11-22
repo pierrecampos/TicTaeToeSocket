@@ -3,6 +3,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -20,7 +21,10 @@
                   </font>
               </Button>
               <TextField fx:id="txtIp" layoutX="76.0" layoutY="175.0" promptText="IP" />
-              <Button layoutX="110.0" layoutY="221.0" mnemonicParsing="false" onAction="#onBtnHostClick" prefHeight="28.0" prefWidth="80.0" style="-fx-background-color: #eb5e28;" text="Hostear" textFill="WHITE" />
+              <Button layoutX="110.0" layoutY="221.0" mnemonicParsing="false" onAction="#onBtnHostClick" prefHeight="28.0" prefWidth="80.0" style="-fx-background-color: #eb5e28;" text="Hostear" textFill="WHITE">
+               <effect>
+                  <DropShadow />
+               </effect></Button>
               <Label alignment="CENTER" layoutX="60.0" layoutY="58.0" prefHeight="51.0" prefWidth="130.0" text="Hostear" textFill="#eb5e28">
                   <font>
                       <Font name="System Bold" size="33.0" />
