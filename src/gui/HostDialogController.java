@@ -4,7 +4,7 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import model.entities.Player;
@@ -16,6 +16,7 @@ import util.Utils;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+
 public class HostDialogController implements Initializable, GameReadyListener {
 
     private static Server server;
@@ -23,6 +24,8 @@ public class HostDialogController implements Initializable, GameReadyListener {
     private TextField txtPort;
     @FXML
     private TextField txtIp;
+    @FXML
+    private Label waiting;
     private Player player;
 
     @FXML
@@ -38,8 +41,10 @@ public class HostDialogController implements Initializable, GameReadyListener {
             player.setToken(Token.CROSS);
             player.setReady(hasConnected);
             player.setServer(server);
+            waiting.setVisible(true);
         }
     }
+
 
     @FXML
     private void onBtnCloseClick(ActionEvent event) {
