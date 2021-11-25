@@ -36,6 +36,7 @@ public class HostDialogController implements Initializable, GameReadyListener {
         if (hostStarted) {
             player.setToken(Token.CROSS);
             player.setReady(true);
+            player.setIsHost(true);
             waiting.setVisible(true);
         }
     }

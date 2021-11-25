@@ -15,7 +15,10 @@ import model.entities.Player;
 import model.entities.TicTacToe;
 import util.Utils;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.URL;
 import java.util.List;
@@ -32,6 +35,12 @@ public class GameScreenController extends Thread implements Initializable {
     private Label player1Name;
     @FXML
     private Label player2Name;
+
+    @FXML
+    private Label player1Token;
+
+    @FXML
+    private Label player2Token;
 
     private int[] fields;
     private List<Node> buttons;
@@ -74,9 +83,9 @@ public class GameScreenController extends Thread implements Initializable {
         this.player = player;
     }
 
-    private void sendMessage(String message) {
+    private void sendMessage(Object object) {
         try {
-            oS.writeObject("");
+            oS.writeObject(object);
             oS.flush();
 //            myTurn = false;
         } catch (IOException e) {
@@ -94,7 +103,7 @@ public class GameScreenController extends Thread implements Initializable {
             Socket socket = player.getPlayerSocketService().getSocket();
             InputStream is = socket.getInputStream();
             ObjectInputStream oIS = new ObjectInputStream(is);
-
+            setOpponentName(oIS);
             while (true) {
                 System.out.println(oIS.readObject());
             }
@@ -106,19 +115,15 @@ public class GameScreenController extends Thread implements Initializable {
     }
 
 
-    private void setOpponentName(BufferedReader bR) throws IOException {
+    private void setOpponentName(ObjectInputStream oIS) throws IOException, ClassNotFoundException {
         sendMessage(player.getName());
-        String opponentName = bR.readLine();
+        String opponentName = (String) oIS.readObject();
 
         Platform.runLater(() -> {
-            if (player.getIsHost()) {
-                player1Name.setText(player.getName());
-                player2Name.setText(opponentName);
-            } else {
-                player1Name.setText(opponentName);
-                player2Name.setText(player.getName());
-            }
-
+            player1Name.setText(player.getName());
+            player2Name.setText(opponentName);
+            player1Token.setText(player.getIsHost() ? "X" : "O");
+            player2Token.setText(player.getIsHost() ? "O" : "X");
         });
     }
 
@@ -212,7 +217,7 @@ public class GameScreenController extends Thread implements Initializable {
 //            oSW = new OutputStreamWriter(oS);
 //            bW = new BufferedWriter(oSW);
         initWriter();
-            start();
+        start();
 //
 //        } catch (IOException e) {
 //            e.printStackTrace();
