@@ -21,6 +21,9 @@ public class ConnectDialogController {
 
     private Player player;
 
+    public ConnectDialogController(Player player){
+        this.player = player;
+    }
 
     @FXML
     public void onBtnConnectClick(ActionEvent event) {
@@ -59,12 +62,6 @@ public class ConnectDialogController {
             }
         });
     }
-
-    public void setPlayer(Player player) {
-        this.player = player;
-    }
-
-
     private void close(Stage currentStage) {
         currentStage.close();
     }

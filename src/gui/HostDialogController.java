@@ -27,6 +27,9 @@ public class HostDialogController implements Initializable, GameReadyListener {
     private Label waiting;
     private Player player;
 
+    public HostDialogController(Player player){
+        this.player = player;
+    }
 
     @FXML
     private void onBtnHostClick() {

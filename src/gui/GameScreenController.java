@@ -47,9 +47,19 @@ public class GameScreenController extends Thread implements Initializable {
     private Player player;
     private boolean myTurn;
     private ObjectOutputStream oS;
+    private InputStream is;
+    private ObjectInputStream oIS;
 
-    public GameScreenController() {
+    public GameScreenController(Player player) {
+        this.player = player;
         game = new TicTacToe();
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        buttons = pane.getChildren().stream().filter(x -> x instanceof Button).collect(Collectors.toList());
+        initEvents();
+        initWriter();
     }
 
     private void initWriter() {
@@ -62,11 +72,6 @@ public class GameScreenController extends Thread implements Initializable {
         }
     }
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        buttons = pane.getChildren().stream().filter(x -> x instanceof Button).collect(Collectors.toList());
-        initEvents();
-    }
 
     private void initEvents() {
         initBoardButtonsEvent();
@@ -79,9 +84,6 @@ public class GameScreenController extends Thread implements Initializable {
         }
     }
 
-    public void setPlayer(Player player) {
-        this.player = player;
-    }
 
     private void sendMessage(Object object) {
         try {
@@ -99,32 +101,34 @@ public class GameScreenController extends Thread implements Initializable {
     }
 
     public void listenMessages() {
+        Socket socket = player.getPlayerSocketService().getSocket();
         try {
-            Socket socket = player.getPlayerSocketService().getSocket();
-            InputStream is = socket.getInputStream();
-            ObjectInputStream oIS = new ObjectInputStream(is);
+            is = socket.getInputStream();
+            oIS = new ObjectInputStream(is);
             setOpponentName(oIS);
             while (true) {
                 System.out.println(oIS.readObject());
             }
-
-
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
 
 
-    private void setOpponentName(ObjectInputStream oIS) throws IOException, ClassNotFoundException {
+    private void setOpponentName(ObjectInputStream oIS) {
         sendMessage(player.getName());
-        String opponentName = (String) oIS.readObject();
+        try {
+            String opponentName = (String) oIS.readObject();
 
-        Platform.runLater(() -> {
-            player1Name.setText(player.getName());
-            player2Name.setText(opponentName);
-            player1Token.setText(player.getIsHost() ? "X" : "O");
-            player2Token.setText(player.getIsHost() ? "O" : "X");
-        });
+            Platform.runLater(() -> {
+                player1Name.setText(player.getName());
+                player2Name.setText(opponentName);
+                player1Token.setText(player.getIsHost() ? "X" : "O");
+                player2Token.setText(player.getIsHost() ? "O" : "X");
+            });
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     private void onButtonBoardClick(ActionEvent event) {
@@ -184,8 +188,8 @@ public class GameScreenController extends Thread implements Initializable {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("GameScreen.fxml"));
                 Pane pane = loader.load();
                 GameScreenController controller = loader.getController();
-                controller.setPlayer(player);
-                controller.setAttributes();
+//                controller.setPlayer(player);
+//                controller.setAttributes();
                 Scene gameScene = new Scene(pane);
                 parentStage.setScene(gameScene);
                 parentStage.setTitle("Jogo da velha! - " + player.getName());
@@ -209,19 +213,5 @@ public class GameScreenController extends Thread implements Initializable {
                 btn.setStyle(color);
             }
         }
-    }
-
-    public void setAttributes() {
-//        try {
-//            oS = player.getPlayerService().getCon().getOutputStream();
-//            oSW = new OutputStreamWriter(oS);
-//            bW = new BufferedWriter(oSW);
-        initWriter();
-        start();
-//
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-
     }
 }

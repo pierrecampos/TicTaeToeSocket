@@ -34,18 +34,19 @@ public class MainController implements Initializable {
     @FXML
     private void onBtnConnectClick(ActionEvent event) {
         Stage parentStage = Utils.currentStage(event);
-        createDialogForm("/gui/ConnectDialog.fxml", parentStage);
+        createDialogForm("/gui/ConnectDialog.fxml", parentStage, new ConnectDialogController(player));
     }
 
     @FXML
     private void onBtnHostGameClick(ActionEvent event) {
         Stage parentStage = Utils.currentStage(event);
-        createDialogForm("/gui/HostDialog.fxml", parentStage);
+        createDialogForm("/gui/HostDialog.fxml", parentStage, new HostDialogController(player));
     }
 
-    private <T> void createDialogForm(String absoluteName, Stage parentStage) {
+    private <T> void createDialogForm(String absoluteName, Stage parentStage, T controller) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
+            loader.setController(controller);
             Pane pane = loader.load();
             Stage dialogStage = new Stage();
             dialogStage.setScene(new Scene(pane));
@@ -54,14 +55,6 @@ public class MainController implements Initializable {
             dialogStage.initModality(Modality.WINDOW_MODAL);
             dialogStage.getScene().setFill(Color.TRANSPARENT);
             dialogStage.getScene().getRoot().setEffect(new DropShadow());
-
-            T controller = loader.getController();
-            if (controller instanceof HostDialogController) {
-                ((HostDialogController) controller).setPlayer(player);
-            } else {
-                ((ConnectDialogController) controller).setPlayer(player);
-            }
-
             dialogStage.initOwner(parentStage);
             dialogStage.showAndWait();
 
@@ -80,13 +73,16 @@ public class MainController implements Initializable {
 
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("GameScreen.fxml"));
+            GameScreenController gameScreenController = new GameScreenController(player);
+            loader.setController(gameScreenController);
             Pane pane = loader.load();
-            GameScreenController controller = loader.getController();
-            controller.setPlayer(player);
-            controller.setAttributes();
             Scene gameScene = new Scene(pane);
+            parentStage.setResizable(false);
             parentStage.setScene(gameScene);
             parentStage.setTitle("Jogo da velha! - " + player.getName() + (player.getIsHost() ? " - Host" : ""));
+
+            Thread t = new Thread(gameScreenController);
+            t.start();
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -115,14 +111,6 @@ public class MainController implements Initializable {
 
     @FXML
     public void debugButton(ActionEvent e) throws IOException {
-        Stage parentStage = Utils.currentStage(e);
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("GameScreen.fxml"));
-        Pane pane = loader.load();
-        GameScreenController controller = loader.getController();
-        controller.setPlayer(player);
-        Scene gameScene = new Scene(pane);
-        parentStage.setScene(gameScene);
-        parentStage.setTitle("Jogo da velha! - " + player.getName());
     }
 }
