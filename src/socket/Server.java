@@ -2,7 +2,6 @@ package socket;
 
 import model.listeners.GameReadyListener;
 
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -11,10 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Server extends Thread {
-    private static List<BufferedWriter> clientsWriter;
     private static ServerSocket server;
     private final int port;
     private final List<GameReadyListener> gameReadyListener;
+    private Socket socket;
     private boolean continueServer;
 
     public Server(int port) {
@@ -23,32 +22,22 @@ public class Server extends Thread {
         gameReadyListener = new ArrayList<>();
     }
 
-
     @Override
     public void run() {
         try {
             server = new ServerSocket(port);
-            clientsWriter = new ArrayList<BufferedWriter>();
+            System.out.println("Aguardando Conexão");
+            socket = server.accept();
+            System.out.println("Cliente conectado " + socket.getInetAddress().getHostAddress());
+            notifyGameReadyListeners();
 
-            //Aguardando conexão dos Players
             while (continueServer) {
-                System.out.println("Aguardando conexão...");
-                Socket con = server.accept();
-                System.out.println("Ip conectado: " + con.getInetAddress().getHostAddress());
-                Thread playerInstance = new PlayerInstance(con, clientsWriter);
-                playerInstance.start();
-
-                if (clientsWriter.size() > 0 && !server.isClosed()) {
-                    continueServer = false;
-                    notifyGameReadyListeners();
-                }
+            }
+            if (socket != null && socket.isConnected()) {
+                socket.close();
             }
 
-            while (!server.isClosed()) {
-
-            }
         } catch (SocketException ignored) {
-
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -65,13 +54,19 @@ public class Server extends Thread {
         }
     }
 
+    public Socket getSocket(){
+        return socket;
+    }
+
     public void closeServer() {
-        try {
-            if (server != null) {
+        if (server != null) {
+            continueServer = false;
+            try {
                 server.close();
+                System.out.println("Server Fechado");
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 }

@@ -35,12 +35,15 @@ public class PlayerInstance extends Thread {
             clientsWriter.add(bW);
             String msg;
             msg = name = bR.readLine();
+            sendMessages(bW, "");
             while (msg != null) {
-                msg = bR.readLine();
-                if (msg == null) {
-                    continue;
+                if(bR.ready()) {
+                    msg = bR.readLine();
+                    if (msg == null) {
+                        continue;
+                    }
+                    sendMessages(bW, msg);
                 }
-                sendMessages(bW, msg);
             }
 
         } catch (IOException e) {

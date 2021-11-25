@@ -14,14 +14,12 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import model.entities.Player;
-import model.services.PlayerService;
+import model.services.PlayerSocketService;
 import util.Utils;
 
-import javax.swing.*;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
-import java.util.function.Consumer;
 
 public class MainController implements Initializable {
 
@@ -30,30 +28,22 @@ public class MainController implements Initializable {
     private TextField txtPlayer;
 
     public MainController() {
-        player = new Player("Player");
+        player = new Player("Player", new PlayerSocketService());
     }
 
     @FXML
     private void onBtnConnectClick(ActionEvent event) {
         Stage parentStage = Utils.currentStage(event);
-        createDialogForm("/gui/ConnectDialog.fxml", parentStage, (ConnectDialogController controller) -> {
-            controller.setPlayer(player);
-            player.setPlayerService(new PlayerService());
-            player.setIsHost(false);
-        });
+        createDialogForm("/gui/ConnectDialog.fxml", parentStage);
     }
 
     @FXML
     private void onBtnHostGameClick(ActionEvent event) {
         Stage parentStage = Utils.currentStage(event);
-        createDialogForm("/gui/HostDialog.fxml", parentStage, (HostDialogController controller) -> {
-            controller.setPlayer(player);
-            player.setPlayerService(new PlayerService());
-            player.setIsHost(true);
-        });
+        createDialogForm("/gui/HostDialog.fxml", parentStage);
     }
 
-    private <T> void createDialogForm(String absoluteName, Stage parentStage, Consumer<T> initializeController) {
+    private <T> void createDialogForm(String absoluteName, Stage parentStage) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
             Pane pane = loader.load();
@@ -64,9 +54,15 @@ public class MainController implements Initializable {
             dialogStage.initModality(Modality.WINDOW_MODAL);
             dialogStage.getScene().setFill(Color.TRANSPARENT);
             dialogStage.getScene().getRoot().setEffect(new DropShadow());
-            dialogStage.initOwner(parentStage);
+
             T controller = loader.getController();
-            initializeController.accept(controller);
+            if (controller instanceof HostDialogController) {
+                ((HostDialogController) controller).setPlayer(player);
+            } else {
+                ((ConnectDialogController) controller).setPlayer(player);
+            }
+
+            dialogStage.initOwner(parentStage);
             dialogStage.showAndWait();
 
             startGame(parentStage);
@@ -78,7 +74,6 @@ public class MainController implements Initializable {
     }
 
     private void startGame(Stage parentStage) {
-
         if (!player.isReady()) {
             return;
         }
@@ -91,7 +86,7 @@ public class MainController implements Initializable {
             controller.setAttributes();
             Scene gameScene = new Scene(pane);
             parentStage.setScene(gameScene);
-            parentStage.setTitle("Jogo da velha! - " + player.getName() + (player.getIsHost() ? " - Host": ""));
+            parentStage.setTitle("Jogo da velha! - " + player.getName() + (player.getIsHost() ? " - Host" : ""));
 
         } catch (IOException e) {
             e.printStackTrace();

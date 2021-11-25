@@ -9,6 +9,8 @@ import model.entities.Player;
 import model.entities.Token;
 import util.Utils;
 
+import java.io.IOException;
+
 public class ConnectDialogController {
 
     @FXML
@@ -32,15 +34,20 @@ public class ConnectDialogController {
     }
 
     private void connectToServer() {
-        int port = Integer.parseInt(txtPort.getText());
         String ip = txtIp.getText();
+        int port = Integer.parseInt(txtPort.getText());
 
-        boolean hasConnected = player.getPlayerService().connect(ip, port);
-        if (hasConnected) {
-            player.setReady(hasConnected);
-            player.setToken(Token.CIRCLE);
-            gameReady();
+        try {
+            boolean hasConnected = player.getPlayerSocketService().startSocket(ip, port);
+            if (hasConnected) {
+                player.setReady(true);
+                player.setToken(Token.CIRCLE);
+                gameReady();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+
     }
 
     public void gameReady() {

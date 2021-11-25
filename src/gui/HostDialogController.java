@@ -19,7 +19,6 @@ import java.util.ResourceBundle;
 
 public class HostDialogController implements Initializable, GameReadyListener {
 
-    private static Server server;
     @FXML
     private TextField txtPort;
     @FXML
@@ -28,31 +27,23 @@ public class HostDialogController implements Initializable, GameReadyListener {
     private Label waiting;
     private Player player;
 
+
     @FXML
-    private void onBtnHostClick(ActionEvent event) {
-        if (server != null) {
-            server.closeServer();
-        }
+    private void onBtnHostClick() {
         int port = Integer.parseInt(txtPort.getText());
         boolean hostStarted = startHost(port);
+
         if (hostStarted) {
-            String ip = txtIp.getText();
-            boolean hasConnected = player.getPlayerService().connect(ip, port);
             player.setToken(Token.CROSS);
-            player.setReady(hasConnected);
-            player.setServer(server);
+            player.setReady(true);
             waiting.setVisible(true);
         }
     }
 
-
     @FXML
     private void onBtnCloseClick(ActionEvent event) {
         player.setReady(false);
-        player.getPlayerService().closeSocket();
-        if (server != null) {
-            server.closeServer();
-        }
+        player.getPlayerSocketService().closeServer();
         Stage currentStage = Utils.currentStage(event);
         close(currentStage);
     }
@@ -62,7 +53,7 @@ public class HostDialogController implements Initializable, GameReadyListener {
     }
 
     private boolean startHost(int port) {
-        server = new Server(port);
+        Server server = player.getPlayerSocketService().startServer(port);
         server.subscribeGameReadyListener(this);
         Thread t = new Thread(server);
         t.start();
@@ -78,7 +69,6 @@ public class HostDialogController implements Initializable, GameReadyListener {
         Stage stage = (Stage) txtIp.getScene().getWindow();
         Platform.runLater(() -> {
             close(stage);
-
         });
     }
 

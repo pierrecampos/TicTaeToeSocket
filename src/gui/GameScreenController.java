@@ -13,14 +13,13 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import model.entities.Player;
 import model.entities.TicTacToe;
-import socket.Server;
 import util.Utils;
 
 import java.io.*;
+import java.net.Socket;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 public class GameScreenController extends Thread implements Initializable {
@@ -38,12 +37,20 @@ public class GameScreenController extends Thread implements Initializable {
     private List<Node> buttons;
     private Player player;
     private boolean myTurn;
-    private OutputStream oS;
-    private Writer oSW;
-    private BufferedWriter bW;
+    private ObjectOutputStream oS;
 
     public GameScreenController() {
         game = new TicTacToe();
+    }
+
+    private void initWriter() {
+        try {
+            Socket socket = player.getPlayerSocketService().getSocket();
+            oS = new ObjectOutputStream(socket.getOutputStream());
+            oS.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -69,9 +76,9 @@ public class GameScreenController extends Thread implements Initializable {
 
     private void sendMessage(String message) {
         try {
-            bW.write(message + "\r\n");
-            bW.flush();
-            myTurn = false;
+            oS.writeObject("");
+            oS.flush();
+//            myTurn = false;
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -79,40 +86,25 @@ public class GameScreenController extends Thread implements Initializable {
 
     @Override
     public void run() {
-        sendMessage("");
         listenMessages();
     }
 
     public void listenMessages() {
-        myTurn = player.getIsHost();
         try {
-            InputStream iS = player.getPlayerService().getCon().getInputStream();
-            InputStreamReader iSR = new InputStreamReader(iS);
-            BufferedReader bR = new BufferedReader(iSR);
-            String msg;
-            AtomicBoolean continueGame = new AtomicBoolean(true);
-            setOpponentName(bR);
-            while (continueGame.get()) {
-                if (bR.ready()) {
-                    msg = bR.readLine();
-                    String finalMsg = msg;
-                    Platform.runLater(() -> {
-                        int index = Integer.parseInt(finalMsg);
-                        fields = Utils.transformIndex(index);
-                        game.play(fields[0], fields[1], !player.getToken().value);
-                        draw(index, !player.getToken().value);
+            Socket socket = player.getPlayerSocketService().getSocket();
+            InputStream is = socket.getInputStream();
+            ObjectInputStream oIS = new ObjectInputStream(is);
 
-                        Boolean[][] winningMatrix = game.isWinner(!player.getToken().value);
-                        continueGame.set(!hasWinner(winningMatrix, false));
-                    });
-                    myTurn = true;
-                }
+            while (true) {
+                System.out.println(oIS.readObject());
             }
-            rematch(false);
-        } catch (IOException e) {
+
+
+        } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
+
 
     private void setOpponentName(BufferedReader bR) throws IOException {
         sendMessage(player.getName());
@@ -126,19 +118,19 @@ public class GameScreenController extends Thread implements Initializable {
                 player1Name.setText(opponentName);
                 player2Name.setText(player.getName());
             }
-            myTurn = player.getIsHost();
+
         });
     }
 
     private void onButtonBoardClick(ActionEvent event) {
-        if (!myTurn) {
-            return;
-        }
+//        if (!myTurn) {
+//            return;
+//        }
         Button clickedButton = (Button) event.getSource();
         int indexButton = buttons.indexOf(clickedButton);
         if (validPLay(indexButton)) {
             sendMessage(String.valueOf(indexButton));
-            game.play(fields[0], fields[1], player.getToken().value);
+//            game.play(fields[0], fields[1], player.getToken().value);
             draw(indexButton, player.getToken().value);
 
             Boolean[][] winningMatrix = game.isWinner(player.getToken().value);
@@ -160,18 +152,19 @@ public class GameScreenController extends Thread implements Initializable {
 
         List<Integer> indexButtons = Utils.transformPosition(winningMatrix);
         drawWinner(indexButtons, winner);
-        myTurn = false;
-        player.getPlayerService().closeSocket();
-        closeServer();
+//        myTurn = false;
+//        closeServer();
         return true;
     }
 
     private void closeServer() {
-        Server server = player.getServer();
-        if (server != null) {
-            server.closeServer();
-            server.interrupt();
-        }
+//        player.getPlayerService().closeSocket();
+
+//        Server server = player.getServer();
+//        if (server != null) {
+//            server.closeServer();
+//            server.interrupt();
+//        }
     }
 
 
@@ -182,13 +175,15 @@ public class GameScreenController extends Thread implements Initializable {
 
             //Apenas para debug - REFATORAR
             try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("Main.fxml"));
-                Pane p = loader.load();
-                MainController controller = loader.getController();
-                Scene gameScene = new Scene(p);
-                Stage stage = (Stage) pane.getScene().getWindow();
-                stage.setScene(gameScene);
-                stage.setTitle("Jogo da velha! - " + player.getName() + (player.getIsHost() ? " - Host" : ""));
+                Stage parentStage = (Stage) pane.getScene().getWindow();
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("GameScreen.fxml"));
+                Pane pane = loader.load();
+                GameScreenController controller = loader.getController();
+                controller.setPlayer(player);
+                controller.setAttributes();
+                Scene gameScene = new Scene(pane);
+                parentStage.setScene(gameScene);
+                parentStage.setTitle("Jogo da velha! - " + player.getName());
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -212,15 +207,16 @@ public class GameScreenController extends Thread implements Initializable {
     }
 
     public void setAttributes() {
-        try {
-            oS = player.getPlayerService().getCon().getOutputStream();
-            oSW = new OutputStreamWriter(oS);
-            bW = new BufferedWriter(oSW);
+//        try {
+//            oS = player.getPlayerService().getCon().getOutputStream();
+//            oSW = new OutputStreamWriter(oS);
+//            bW = new BufferedWriter(oSW);
+        initWriter();
             start();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 
     }
 }
