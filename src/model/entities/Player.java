@@ -2,17 +2,20 @@ package model.entities;
 
 import model.services.PlayerSocketService;
 
-public class Player {
+public class Player implements  Cloneable{
     private String name;
     private Token token;
     private PlayerSocketService playerSocketService;
     private boolean isHost;
     private boolean isReady;
+    private boolean winner;
 
     public Player(String name, PlayerSocketService playerSocketService) {
         this.name = name;
         this.playerSocketService = playerSocketService;
     }
+
+
 
     public String getName() {
         return name;
@@ -50,10 +53,27 @@ public class Player {
         isReady = ready;
     }
 
+    public boolean getIsWinner() {
+        return winner;
+    }
+
+    public void setWinner(boolean winner) {
+        this.winner = winner;
+    }
+
     @Override
     public String toString() {
         return name;
     }
 
 
+    @Override
+    public Player clone() {
+        try {
+            Player clone = (Player) super.clone();
+            return clone;
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
+    }
 }

@@ -13,6 +13,8 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import model.entities.Player;
 import model.entities.TicTacToe;
+import model.services.PlayerSocketService;
+import socket.Server;
 import util.Utils;
 
 import java.io.IOException;
@@ -23,28 +25,26 @@ import java.net.Socket;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 public class GameScreenController extends Thread implements Initializable {
 
     private static final long serialVersionUID = 1L;
     private final TicTacToe game;
+    private Player player;
     @FXML
     private Pane pane;
     @FXML
     private Label player1Name;
     @FXML
     private Label player2Name;
-
     @FXML
     private Label player1Token;
-
     @FXML
     private Label player2Token;
-
     private int[] fields;
     private List<Node> buttons;
-    private Player player;
     private boolean myTurn;
     private ObjectOutputStream oS;
     private InputStream is;
@@ -58,6 +58,7 @@ public class GameScreenController extends Thread implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         buttons = pane.getChildren().stream().filter(x -> x instanceof Button).collect(Collectors.toList());
+        System.out.println(player.getName());
         initEvents();
         initWriter();
     }
@@ -89,7 +90,6 @@ public class GameScreenController extends Thread implements Initializable {
         try {
             oS.writeObject(object);
             oS.flush();
-//            myTurn = false;
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -97,7 +97,10 @@ public class GameScreenController extends Thread implements Initializable {
 
     @Override
     public void run() {
+        myTurn = player.getIsHost();
+        System.out.println(myTurn);
         listenMessages();
+        rematch(player.getIsWinner());
     }
 
     public void listenMessages() {
@@ -106,8 +109,25 @@ public class GameScreenController extends Thread implements Initializable {
             is = socket.getInputStream();
             oIS = new ObjectInputStream(is);
             setOpponentName(oIS);
-            while (true) {
-                System.out.println(oIS.readObject());
+            AtomicBoolean continueGame = new AtomicBoolean(true);
+            while (continueGame.get()) {
+                Integer index = (Integer) oIS.readObject();
+                if (index == -1) {
+                    continueGame.set(false);
+                    player.setWinner(player.getIsWinner());
+                    sendMessage(-1);
+                    continue;
+                }
+                Platform.runLater(() -> {
+                    boolean adversaryToken = !player.getToken().value;
+                    fields = Utils.transformIndex(index);
+                    game.play(fields[0], fields[1], adversaryToken);
+                    draw(index, adversaryToken);
+
+                    myTurn = true;
+                    Boolean[][] winningMatrix = game.isWinner(adversaryToken);
+                    continueGame.set(!hasWinner(winningMatrix, false));
+                });
             }
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
@@ -132,19 +152,22 @@ public class GameScreenController extends Thread implements Initializable {
     }
 
     private void onButtonBoardClick(ActionEvent event) {
-//        if (!myTurn) {
-//            return;
-//        }
+        if (!myTurn) {
+            return;
+        }
         Button clickedButton = (Button) event.getSource();
         int indexButton = buttons.indexOf(clickedButton);
         if (validPLay(indexButton)) {
-            sendMessage(String.valueOf(indexButton));
-//            game.play(fields[0], fields[1], player.getToken().value);
-            draw(indexButton, player.getToken().value);
 
+            game.play(fields[0], fields[1], player.getToken().value);
+            draw(indexButton, player.getToken().value);
             Boolean[][] winningMatrix = game.isWinner(player.getToken().value);
-            if (hasWinner(winningMatrix, true)) {
-                rematch(true);
+            boolean hasWinner = hasWinner(winningMatrix, true);
+            sendMessage(indexButton);
+            myTurn = false;
+            if (hasWinner) {
+                player.setWinner(true);
+                sendMessage(-1);
             }
         }
     }
@@ -159,10 +182,9 @@ public class GameScreenController extends Thread implements Initializable {
             return false;
         }
 
+        myTurn = false;
         List<Integer> indexButtons = Utils.transformPosition(winningMatrix);
         drawWinner(indexButtons, winner);
-//        myTurn = false;
-//        closeServer();
         return true;
     }
 
@@ -178,24 +200,21 @@ public class GameScreenController extends Thread implements Initializable {
 
 
     private void rematch(boolean winner) {
-        String answer = "Você " + (winner ? "Ganhou" : "Perdeu");
+        String msg = "Você " + (winner ? "Ganhou" : "Perdeu");
         Platform.runLater(() -> {
-            Utils.showConfirmation("Fim de Jogo", answer);
+            Utils.showConfirmation("Fim de Jogo", msg);
 
-            //Apenas para debug - REFATORAR
+
+//            //Apenas para debug - REFATORAR
             try {
-                Stage parentStage = (Stage) pane.getScene().getWindow();
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("GameScreen.fxml"));
-                Pane pane = loader.load();
-                GameScreenController controller = loader.getController();
-//                controller.setPlayer(player);
-//                controller.setAttributes();
-                Scene gameScene = new Scene(pane);
-                parentStage.setScene(gameScene);
-                parentStage.setTitle("Jogo da velha! - " + player.getName());
+                oIS.close();
+                is.close();
+                oS.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
+
+
         });
     }
 
