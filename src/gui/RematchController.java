@@ -52,7 +52,6 @@ public class RematchController extends Thread {
         try {
             show();
             Boolean adversary = (Boolean) oIS.readObject();
-            System.out.println("ADV");
             callback.accept(adversary.equals(rematchGame));
         } catch (ClassNotFoundException | IOException e) {
             e.printStackTrace();

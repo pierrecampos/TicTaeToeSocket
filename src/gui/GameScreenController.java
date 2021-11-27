@@ -3,8 +3,10 @@ package gui;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
@@ -189,12 +191,20 @@ public class GameScreenController extends Thread implements Initializable {
             Stage parentStage = (Stage) pane.getScene().getWindow();
             RematchController rematchController = new RematchController(parentStage, player, oIS, oS, this::createRematch);
             rematchController.start();
-
         });
     }
 
-    private void createRematch(Boolean create){
-        System.out.println(create);
+    private void createRematch(Boolean create) {
+        try {
+            if (create) {
+                player.getPlayerSocketService().restartService();
+                createWindow("GameScreen.fxml", "Jogo da Velha - " + player.getName());
+            } else {
+
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void draw(int index, boolean token) {
@@ -214,4 +224,28 @@ public class GameScreenController extends Thread implements Initializable {
             }
         }
     }
+
+
+    private void createWindow(String absoluteName, String title) {
+        Stage parentStage = (Stage) pane.getScene().getWindow();
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("GameScreen.fxml"));
+        GameScreenController gameScreenController = new GameScreenController(player);
+        loader.setController(gameScreenController);
+        Pane pane = null;
+        try {
+            pane = loader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Scene gameScene = new Scene(pane);
+        parentStage.setResizable(false);
+        parentStage.setScene(gameScene);
+        parentStage.setTitle(title);
+
+        Thread t = new Thread(gameScreenController);
+        t.start();
+    }
+
+
 }

@@ -2,7 +2,7 @@ package model.entities;
 
 import model.services.PlayerSocketService;
 
-public class Player implements  Cloneable{
+public class Player {
     private String name;
     private Token token;
     private PlayerSocketService playerSocketService;
@@ -66,14 +66,4 @@ public class Player implements  Cloneable{
         return name;
     }
 
-
-    @Override
-    public Player clone() {
-        try {
-            Player clone = (Player) super.clone();
-            return clone;
-        } catch (CloneNotSupportedException e) {
-            throw new AssertionError();
-        }
-    }
 }
