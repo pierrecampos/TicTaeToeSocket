@@ -38,7 +38,7 @@ public class HostDialogController implements Initializable, GameReadyListener {
 
         if (hostStarted) {
             player.setToken(Token.CROSS);
-            player.setReady(true);
+            player.setIsReady(true);
             player.setIsHost(true);
             waiting.setVisible(true);
         }
@@ -46,7 +46,7 @@ public class HostDialogController implements Initializable, GameReadyListener {
 
     @FXML
     private void onBtnCloseClick(ActionEvent event) {
-        player.setReady(false);
+        player.setIsReady(false);
         player.getPlayerSocketService().closeServer();
         Stage currentStage = Utils.currentStage(event);
         close(currentStage);

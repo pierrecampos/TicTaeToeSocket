@@ -5,11 +5,10 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="300.0" prefWidth="300.0" style="-fx-background-color: #fffcf2;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.RematchScreenController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="300.0" prefWidth="300.0" style="-fx-background-color: #fffcf2;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Button layoutX="111.0" layoutY="182.0" mnemonicParsing="false" onAction="#onBtnConnectClick" prefHeight="28.0" prefWidth="80.0" style="-fx-background-color: #403d39;" text="Sim" textFill="WHITE" />
-      <Button layoutX="110.0" layoutY="227.0" mnemonicParsing="false" onAction="#onBtnConnectClick" prefHeight="28.0" prefWidth="80.0" style="-fx-background-color: #eb5e28;" text="Não" textFill="WHITE" />
+      <Button fx:id="btnYes" layoutX="111.0" layoutY="182.0" mnemonicParsing="false" onAction="#onRematchYesClick" prefHeight="28.0" prefWidth="80.0" style="-fx-background-color: #403d39;" text="Sim" textFill="WHITE" />
+      <Button fx:id="btnNo" layoutX="110.0" layoutY="227.0" mnemonicParsing="false" onAction="#onRematchNoClick" prefHeight="28.0" prefWidth="80.0" style="-fx-background-color: #eb5e28;" text="Não" textFill="WHITE" />
       <Label layoutX="91.0" layoutY="70.0" text="Revanche?" textFill="#eb5e28">
          <font>
             <Font name="System Bold" size="24.0" />

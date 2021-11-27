@@ -67,7 +67,7 @@ public class MainController implements Initializable {
     }
 
     private void startGame(Stage parentStage) {
-        if (!player.isReady()) {
+        if (!player.getIsReady()) {
             return;
         }
 
@@ -111,6 +111,8 @@ public class MainController implements Initializable {
 
     @FXML
     public void debugButton(ActionEvent e) throws IOException {
-
+        Stage parentStage = Utils.currentStage(e);
+//        RematchController rematchController = new RematchController(parentStage, player);
+//        rematchController.start();
     }
 }

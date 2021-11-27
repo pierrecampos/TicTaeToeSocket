@@ -43,7 +43,7 @@ public class ConnectDialogController {
         try {
             boolean hasConnected = player.getPlayerSocketService().startSocket(ip, port);
             if (hasConnected) {
-                player.setReady(true);
+                player.setIsReady(true);
                 player.setToken(Token.CIRCLE);
                 gameReady();
             }

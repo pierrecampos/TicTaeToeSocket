@@ -8,14 +8,12 @@ public class Player implements  Cloneable{
     private PlayerSocketService playerSocketService;
     private boolean isHost;
     private boolean isReady;
-    private boolean winner;
+    private boolean isWinner;
 
     public Player(String name, PlayerSocketService playerSocketService) {
         this.name = name;
         this.playerSocketService = playerSocketService;
     }
-
-
 
     public String getName() {
         return name;
@@ -45,21 +43,23 @@ public class Player implements  Cloneable{
         this.isHost = isHost;
     }
 
-    public boolean isReady() {
+    public boolean getIsReady() {
         return isReady;
     }
 
-    public void setReady(boolean ready) {
-        isReady = ready;
+    public void setIsReady(boolean isReady) {
+        this.isReady = isReady;
     }
 
     public boolean getIsWinner() {
-        return winner;
+        return isWinner;
     }
 
-    public void setWinner(boolean winner) {
-        this.winner = winner;
+    public void setIsWinner(boolean isWinner) {
+       this.isWinner = isWinner;
     }
+
+
 
     @Override
     public String toString() {
