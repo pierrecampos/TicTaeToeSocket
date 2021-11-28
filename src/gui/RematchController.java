@@ -50,6 +50,11 @@ public class RematchController extends Thread implements Initializable {
 
     @Override
     public void run() {
+        try {
+            sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         Platform.runLater(this::listenMessage);
 
     }

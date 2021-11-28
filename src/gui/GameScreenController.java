@@ -1,5 +1,6 @@
 package gui;
 
+import animation.Bounce;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -185,7 +186,6 @@ public class GameScreenController extends Thread implements Initializable {
     }
 
     private void rematch(boolean winner) {
-        String msg = "Você " + (winner ? "Ganhou" : "Perdeu");
         Platform.runLater(() -> {
             Stage parentStage = (Stage) pane.getScene().getWindow();
             RematchController rematchController = new RematchController(parentStage, player, oIS, oS, this::createRematch, winner);
@@ -220,7 +220,9 @@ public class GameScreenController extends Thread implements Initializable {
             Button btn = (Button) button;
             if (indexButtons.contains(buttons.indexOf(btn))) {
                 btn.setStyle(color);
+                new Bounce(btn).play();
             }
+
         }
     }
 
