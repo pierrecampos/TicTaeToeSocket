@@ -2,13 +2,16 @@ package model.entities;
 
 public class TicTacToe {
     Boolean[][] board;
+    private int rounds;
 
     public TicTacToe() {
+        rounds = 0;
         board = new Boolean[3][3];
     }
 
     public void play(int row, int column, boolean token) {
         board[row][column] = token;
+        rounds++;
     }
 
     public boolean validPlay(int row, int column) {
@@ -17,6 +20,10 @@ public class TicTacToe {
 
     public Boolean[][] getBoard() {
         return board;
+    }
+
+    public int getRounds(){
+        return rounds;
     }
 
     //Logica do jogo da velha

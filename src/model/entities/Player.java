@@ -1,5 +1,7 @@
 package model.entities;
 
+import model.constants.GameConstants;
+import model.constants.Token;
 import model.services.PlayerSocketService;
 
 public class Player {
@@ -8,7 +10,7 @@ public class Player {
     private PlayerSocketService playerSocketService;
     private boolean isHost;
     private boolean isReady;
-    private boolean isWinner;
+    private GameConstants result;
 
     public Player(String name, PlayerSocketService playerSocketService) {
         this.name = name;
@@ -51,12 +53,12 @@ public class Player {
         this.isReady = isReady;
     }
 
-    public boolean getIsWinner() {
-        return isWinner;
+    public GameConstants getResult() {
+        return result;
     }
 
-    public void setIsWinner(boolean isWinner) {
-       this.isWinner = isWinner;
+    public void setResult(GameConstants result) {
+       this.result = result;
     }
 
 

@@ -6,7 +6,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import model.entities.Player;
-import model.entities.Token;
+import model.constants.Token;
 import util.Utils;
 
 import java.io.IOException;

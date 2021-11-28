@@ -1,6 +1,8 @@
 package gui;
 
-import animation.*;
+import animation.Flip;
+import animation.Hinge;
+import animation.Jello;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -12,6 +14,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import model.constants.GameConstants;
 import model.entities.Player;
 import model.entities.TicTacToe;
 import util.Utils;
@@ -22,6 +25,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -97,7 +101,7 @@ public class GameScreenController extends Thread implements Initializable {
     public void run() {
         myTurn = player.getIsHost();
         listenMessages();
-        rematch(player.getIsWinner());
+        rematch(player.getResult());
     }
 
     public void listenMessages() {
@@ -109,8 +113,13 @@ public class GameScreenController extends Thread implements Initializable {
             AtomicBoolean continueGame = new AtomicBoolean(true);
             while (continueGame.get()) {
                 Integer index = (Integer) oIS.readObject();
+
                 if (index == -1) {
-                    player.setIsWinner(true);
+                    player.setResult(GameConstants.WINNER);
+                    continueGame.set(false);
+                    continue;
+                } else if (index == -2) {
+                    player.setResult(GameConstants.DRAW);
                     continueGame.set(false);
                     continue;
                 }
@@ -122,11 +131,19 @@ public class GameScreenController extends Thread implements Initializable {
 
                 draw(index, adversaryToken);
 
-                if (hasWinner(winningMatrix, false)) {
-                    player.setIsWinner(false);
+                if (hasWinner(winningMatrix, GameConstants.LOSER)) {
+                    player.setResult(GameConstants.LOSER);
                     sendMessage(-1);
                     continueGame.set(false);
+                } else {
+                    if (game.getRounds() == 9) {
+                        player.setResult(GameConstants.DRAW);
+                        sendMessage(-2);
+                        continueGame.set(false);
+                        drawWinner(new ArrayList(), GameConstants.DRAW);
+                    }
                 }
+
                 myTurn = true;
             }
         } catch (IOException | ClassNotFoundException e) {
@@ -162,7 +179,12 @@ public class GameScreenController extends Thread implements Initializable {
             game.play(fields[0], fields[1], player.getToken().value);
             draw(indexButton, player.getToken().value);
             Boolean[][] winningMatrix = game.isWinner(player.getToken().value);
-            boolean hasWinner = hasWinner(winningMatrix, true);
+            if (!hasWinner(winningMatrix, GameConstants.WINNER)) {
+                if (game.getRounds() == 9) {
+                    player.setResult(GameConstants.DRAW);
+                    drawWinner(new ArrayList(), GameConstants.DRAW);
+                }
+            }
             sendMessage(indexButton);
             myTurn = false;
 
@@ -174,21 +196,21 @@ public class GameScreenController extends Thread implements Initializable {
         return game.validPlay(fields[0], fields[1]);
     }
 
-    private boolean hasWinner(Boolean[][] winningMatrix, boolean winner) {
+    private boolean hasWinner(Boolean[][] winningMatrix, GameConstants result) {
         if (winningMatrix.length == 0) {
             return false;
         }
 
         myTurn = false;
         List<Integer> indexButtons = Utils.transformPosition(winningMatrix);
-        drawWinner(indexButtons, winner);
+        drawWinner(indexButtons, result);
         return true;
     }
 
-    private void rematch(boolean winner) {
+    private void rematch(GameConstants result) {
         Platform.runLater(() -> {
             Stage parentStage = (Stage) pane.getScene().getWindow();
-            RematchController rematchController = new RematchController(parentStage, player, oIS, oS, this::createRematch, winner);
+            RematchController rematchController = new RematchController(parentStage, player, oIS, oS, this::createRematch, result);
             rematchController.start();
         });
     }
@@ -214,20 +236,35 @@ public class GameScreenController extends Thread implements Initializable {
         });
     }
 
-    private void drawWinner(List<Integer> indexButtons, boolean winner) {
-        String color = "-fx-background-color: " + (winner ? "#60D394;" : "#EE6055;");
+    private void drawWinner(List<Integer> indexButtons, GameConstants result) {
         for (Node button : buttons) {
             Button btn = (Button) button;
             if (indexButtons.contains(buttons.indexOf(btn))) {
-                btn.setStyle(color);
-                if (winner) {
-                    new Flip(btn).play();
-                } else {
-                    new Hinge(btn).play();
-                }
+                setResult(result, btn);
+            } else if (result.equals(GameConstants.DRAW)) {
+                setResult(result, btn);
             }
 
         }
+    }
+
+    private void setResult(GameConstants result, Button btn) {
+        String color = "-fx-background-color: ";
+        switch (result) {
+            case WINNER:
+                color += "#60D394;";
+                new Flip(btn).play();
+                break;
+            case LOSER:
+                color += "#EE6055;";
+                new Hinge(btn).play();
+                break;
+            case DRAW:
+                color += "transparent";
+                new Jello(btn).play();
+                break;
+        }
+        btn.setStyle(color);
     }
 
 

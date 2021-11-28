@@ -8,7 +8,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import model.entities.Player;
-import model.entities.Token;
+import model.constants.Token;
 import model.listeners.GameReadyListener;
 import socket.Server;
 import util.Utils;
