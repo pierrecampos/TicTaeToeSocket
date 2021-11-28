@@ -51,20 +51,23 @@ public class Server extends Thread {
         }
     }
 
-    public Socket getSocket(){
+    public Socket getSocket() {
         return socket;
     }
 
     public void closeServer() {
-        if (server != null) {
-            continueServer = false;
-            try {
-                socket.close();
+
+        try {
+            if (server != null) {
+                continueServer = false;
+                if (socket != null) {
+                    socket.close();
+                }
                 server.close();
                 System.out.println("Server Fechado");
-            } catch (IOException e) {
-                e.printStackTrace();
             }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

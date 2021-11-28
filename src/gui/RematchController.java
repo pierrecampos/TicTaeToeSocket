@@ -23,9 +23,8 @@ public class RematchController extends Thread {
     private final Stage parentStage;
     private final ObjectInputStream oIS;
     private final ObjectOutputStream oS;
-    private Boolean rematchGame;
     private final Consumer<Boolean> callback;
-
+    private Boolean rematchGame;
     @FXML
     private Button btnYes;
 
