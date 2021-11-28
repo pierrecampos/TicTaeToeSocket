@@ -13,15 +13,13 @@ import java.io.IOException;
 
 public class ConnectDialogController {
 
+    private final Player player;
     @FXML
     private TextField txtIp;
-
     @FXML
     private TextField txtPort;
 
-    private Player player;
-
-    public ConnectDialogController(Player player){
+    public ConnectDialogController(Player player) {
         this.player = player;
     }
 
@@ -62,6 +60,7 @@ public class ConnectDialogController {
             }
         });
     }
+
     private void close(Stage currentStage) {
         currentStage.close();
     }

@@ -1,5 +1,6 @@
 package gui;
 
+import animation.ZoomIn;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -65,6 +66,7 @@ public class MainController implements Initializable {
             dialogStage.setOnShown(e -> {
                 dialogStage.setX(centerXPosition - dialogStage.getWidth()/2d);
                 dialogStage.setY(centerYPosition - dialogStage.getHeight()/2d);
+                new ZoomIn(dialogStage.getScene().getRoot()).play();
             });
 
             dialogStage.showAndWait();
