@@ -16,8 +16,6 @@ import model.entities.Player;
 import model.services.PlayerSocketService;
 import util.Utils;
 
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -61,11 +59,16 @@ public class MainController implements Initializable {
             dialogStage.getScene().setFill(Color.TRANSPARENT);
             dialogStage.getScene().getRoot().setEffect(new DropShadow());
             dialogStage.initOwner(parentStage);
+            double centerXPosition = parentStage.getX() + parentStage.getWidth() / 2d;
+            double centerYPosition = parentStage.getY() + parentStage.getHeight() / 2d;
+
+            dialogStage.setOnShown(e -> {
+                dialogStage.setX(centerXPosition - dialogStage.getWidth()/2d);
+                dialogStage.setY(centerYPosition - dialogStage.getHeight()/2d);
+            });
+
             dialogStage.showAndWait();
-
             startGame(parentStage);
-
-
         } catch (IOException e) {
             e.printStackTrace();
         }

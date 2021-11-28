@@ -77,6 +77,15 @@ public class RematchController extends Thread implements Initializable {
             dialogStage.getScene().setFill(Color.TRANSPARENT);
             dialogStage.getScene().getRoot().setEffect(new DropShadow());
             dialogStage.initOwner(parentStage);
+
+            double centerXPosition = parentStage.getX() + parentStage.getWidth() / 2d;
+            double centerYPosition = parentStage.getY() + parentStage.getHeight() / 2d;
+
+            dialogStage.setOnShown(e -> {
+                dialogStage.setX(centerXPosition - dialogStage.getWidth()/2d);
+                dialogStage.setY(centerYPosition - dialogStage.getHeight()/2d);
+            });
+
             dialogStage.showAndWait();
 
         } catch (IOException e) {
