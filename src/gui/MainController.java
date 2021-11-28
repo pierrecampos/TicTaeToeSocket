@@ -7,7 +7,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.TextField;
 import javafx.scene.effect.DropShadow;
-import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
@@ -17,6 +16,8 @@ import model.entities.Player;
 import model.services.PlayerSocketService;
 import util.Utils;
 
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -31,7 +32,7 @@ public class MainController implements Initializable {
         player = new Player("Player", new PlayerSocketService());
     }
 
-    public MainController(Player player){
+    public MainController(Player player) {
         this.player = player;
     }
 
@@ -106,17 +107,6 @@ public class MainController implements Initializable {
     }
 
     private void initEvents() {
-        txtPlayer.setOnKeyPressed(e -> {
-            if (e.getCode() == KeyCode.ENTER) {
-                player.setName(txtPlayer.getText());
-            }
-        });
-    }
-
-    @FXML
-    public void debugButton(ActionEvent e) throws IOException {
-        Stage parentStage = Utils.currentStage(e);
-//        RematchController rematchController = new RematchController(parentStage, player);
-//        rematchController.start();
+        txtPlayer.focusedProperty().addListener((obs) -> player.setName(txtPlayer.getText()));
     }
 }

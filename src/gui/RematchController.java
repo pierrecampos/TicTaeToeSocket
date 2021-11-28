@@ -62,7 +62,6 @@ public class RematchController extends Thread implements Initializable {
         } catch (ClassNotFoundException | IOException e) {
             e.printStackTrace();
         }
-
     }
 
     public void show() {
