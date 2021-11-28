@@ -108,7 +108,6 @@ public class GameScreenController extends Thread implements Initializable {
             AtomicBoolean continueGame = new AtomicBoolean(true);
             while (continueGame.get()) {
                 Integer index = (Integer) oIS.readObject();
-                System.out.println(player.getIsHost() + " - Index: " + index + " - continueGame " + continueGame.get());
                 if (index == -1) {
                     player.setIsWinner(true);
                     continueGame.set(false);
@@ -195,15 +194,15 @@ public class GameScreenController extends Thread implements Initializable {
     }
 
     private void createRematch(Boolean create) {
-        try {
-            if (create) {
-                player.getPlayerSocketService().restartService();
-                createWindow("GameScreen.fxml", "Jogo da Velha - " + player.getName());
-            } else {
-
+        if (create) {
+            createWindow("GameScreen.fxml", "Jogo da Velha - " + player.getName(), new GameScreenController(player));
+        } else {
+            try {
+                player.getPlayerSocketService().closeService();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+            createWindow("Main.fxml", "Jogo da Velha", new MainController(player));
         }
     }
 
@@ -226,12 +225,12 @@ public class GameScreenController extends Thread implements Initializable {
     }
 
 
-    private void createWindow(String absoluteName, String title) {
+    private <T> void createWindow(String absoluteName, String title, T controller) {
         Stage parentStage = (Stage) pane.getScene().getWindow();
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("GameScreen.fxml"));
-        GameScreenController gameScreenController = new GameScreenController(player);
-        loader.setController(gameScreenController);
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
+
+        loader.setController(controller);
         Pane pane = null;
         try {
             pane = loader.load();
@@ -243,8 +242,13 @@ public class GameScreenController extends Thread implements Initializable {
         parentStage.setScene(gameScene);
         parentStage.setTitle(title);
 
-        Thread t = new Thread(gameScreenController);
-        t.start();
+        if (controller instanceof GameScreenController) {
+            GameScreenController gameScreenController = (GameScreenController) controller;
+            Thread t = new Thread(gameScreenController);
+            t.start();
+        }else{
+            parentStage.setScene(gameScene);
+        }
     }
 
 

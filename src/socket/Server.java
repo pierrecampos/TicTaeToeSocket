@@ -33,9 +33,6 @@ public class Server extends Thread {
 
             while (continueServer) {
             }
-            if (socket != null && socket.isConnected()) {
-                socket.close();
-            }
 
         } catch (SocketException ignored) {
         } catch (IOException e) {
@@ -62,6 +59,7 @@ public class Server extends Thread {
         if (server != null) {
             continueServer = false;
             try {
+                socket.close();
                 server.close();
                 System.out.println("Server Fechado");
             } catch (IOException e) {

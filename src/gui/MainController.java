@@ -31,6 +31,10 @@ public class MainController implements Initializable {
         player = new Player("Player", new PlayerSocketService());
     }
 
+    public MainController(Player player){
+        this.player = player;
+    }
+
     @FXML
     private void onBtnConnectClick(ActionEvent event) {
         Stage parentStage = Utils.currentStage(event);

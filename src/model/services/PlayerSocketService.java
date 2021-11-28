@@ -35,23 +35,14 @@ public class PlayerSocketService {
         return server != null ? server.getSocket() : socket;
     }
 
-
-    public void restartService() throws IOException {
-        if(server != null){
-            closeServer();
-            Server server = startServer(port);
-            new Thread(server).start();
-        }else {
+    public void closeService() throws IOException {
+        if (socket != null) {
             socket.close();
-//            startSocket(ip, port);
-            System.out.println("CONNECTADO " + startSocket(ip, port));
         }
-    }
-
-    public void closeServer() {
         if (server != null) {
             server.closeServer();
         }
+
     }
 
 

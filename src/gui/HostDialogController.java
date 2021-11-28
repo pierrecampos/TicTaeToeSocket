@@ -13,6 +13,7 @@ import model.listeners.GameReadyListener;
 import socket.Server;
 import util.Utils;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -45,9 +46,9 @@ public class HostDialogController implements Initializable, GameReadyListener {
     }
 
     @FXML
-    private void onBtnCloseClick(ActionEvent event) {
+    private void onBtnCloseClick(ActionEvent event) throws IOException {
         player.setIsReady(false);
-        player.getPlayerSocketService().closeServer();
+        player.getPlayerSocketService().closeService();
         Stage currentStage = Utils.currentStage(event);
         close(currentStage);
     }

@@ -21,7 +21,6 @@ import java.util.function.Consumer;
 
 public class RematchController extends Thread {
     private final Stage parentStage;
-    private final Player player;
     private final ObjectInputStream oIS;
     private final ObjectOutputStream oS;
     private Boolean rematchGame;
@@ -36,7 +35,6 @@ public class RematchController extends Thread {
 
     public RematchController(Stage parentStage, Player player, ObjectInputStream oIS, ObjectOutputStream oS, Consumer<Boolean> callback) {
         this.parentStage = parentStage;
-        this.player = player;
         this.oIS = oIS;
         this.oS = oS;
         this.callback = callback;
@@ -52,7 +50,7 @@ public class RematchController extends Thread {
         try {
             show();
             Boolean adversary = (Boolean) oIS.readObject();
-            callback.accept(adversary.equals(rematchGame));
+            callback.accept(adversary && rematchGame);
         } catch (ClassNotFoundException | IOException e) {
             e.printStackTrace();
         }
