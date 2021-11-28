@@ -246,7 +246,7 @@ public class GameScreenController extends Thread implements Initializable {
             GameScreenController gameScreenController = (GameScreenController) controller;
             Thread t = new Thread(gameScreenController);
             t.start();
-        }else{
+        } else {
             parentStage.setScene(gameScene);
         }
     }

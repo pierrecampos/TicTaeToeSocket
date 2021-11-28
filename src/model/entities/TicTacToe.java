@@ -61,8 +61,12 @@ public class TicTacToe {
                 }
             }
 
-            winningFieldsRow = winningFieldsColumn = winningFieldsPrimaryDiagonal = new Boolean[3][3];
-            rowSum = columnSum = diagonalPrimarySum = 0;
+            winningFieldsRow = new Boolean[3][3];
+            winningFieldsColumn = new Boolean[3][3];
+            winningFieldsPrimaryDiagonal = new Boolean[3][3];
+            rowSum = 0;
+            columnSum = 0;
+            diagonalPrimarySum = 0;
         }
 
         //analisa a diagonal secundaria
