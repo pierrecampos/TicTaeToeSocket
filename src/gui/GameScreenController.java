@@ -188,7 +188,7 @@ public class GameScreenController extends Thread implements Initializable {
         String msg = "Você " + (winner ? "Ganhou" : "Perdeu");
         Platform.runLater(() -> {
             Stage parentStage = (Stage) pane.getScene().getWindow();
-            RematchController rematchController = new RematchController(parentStage, player, oIS, oS, this::createRematch);
+            RematchController rematchController = new RematchController(parentStage, player, oIS, oS, this::createRematch, winner);
             rematchController.start();
         });
     }

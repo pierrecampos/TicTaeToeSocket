@@ -4,8 +4,10 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -17,26 +19,33 @@ import model.entities.Player;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.URL;
+import java.util.ResourceBundle;
 import java.util.function.Consumer;
 
-public class RematchController extends Thread {
+public class RematchController extends Thread implements Initializable {
     private final Stage parentStage;
     private final ObjectInputStream oIS;
     private final ObjectOutputStream oS;
     private final Consumer<Boolean> callback;
     private Boolean rematchGame;
+    private boolean winner;
     @FXML
     private Button btnYes;
 
     @FXML
     private Button btnNo;
 
+    @FXML
+    private Label winLabel;
 
-    public RematchController(Stage parentStage, Player player, ObjectInputStream oIS, ObjectOutputStream oS, Consumer<Boolean> callback) {
+
+    public RematchController(Stage parentStage, Player player, ObjectInputStream oIS, ObjectOutputStream oS, Consumer<Boolean> callback, boolean winner) {
         this.parentStage = parentStage;
         this.oIS = oIS;
         this.oS = oS;
         this.callback = callback;
+        this.winner = winner;
     }
 
     @Override
@@ -114,4 +123,14 @@ public class RematchController extends Thread {
     }
 
 
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        if(winner){
+            winLabel.setText("Jogo Vencedor");
+            winLabel.setStyle( "-fx-text-fill: #2b9348;");
+        }else{
+            winLabel.setText("Jogo Perdedor");
+            winLabel.setStyle( "-fx-text-fill: #e5383b;");
+        }
+    }
 }
