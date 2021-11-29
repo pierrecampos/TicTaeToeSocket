@@ -15,6 +15,8 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import model.constants.GameConstants;
+import model.constants.Token;
+import model.entities.AI;
 import model.entities.Player;
 import model.entities.TicTacToe;
 import util.Utils;
@@ -36,6 +38,7 @@ public class GameScreenController extends Thread implements Initializable {
     private static final long serialVersionUID = 1L;
     private final TicTacToe game;
     private final Player player;
+    private final GameConstants status;
     @FXML
     private Pane pane;
     @FXML
@@ -52,13 +55,13 @@ public class GameScreenController extends Thread implements Initializable {
     private ObjectOutputStream oS;
     private InputStream is;
     private ObjectInputStream oIS;
-    private final GameConstants status;
+    private AI ai;
+
 
     public GameScreenController(Player player, GameConstants status) {
         this.player = player;
         this.status = status;
         game = new TicTacToe();
-
     }
 
     @Override
@@ -108,10 +111,12 @@ public class GameScreenController extends Thread implements Initializable {
         manageMatch();
     }
 
-    private void manageMatch(){
+    private void manageMatch() {
         if (GameConstants.ONLINE.equals(status)) {
             listenMessages();
             rematch(player.getResult());
+        } else {
+            ai = new AI(Token.CIRCLE);
         }
     }
 
@@ -196,13 +201,14 @@ public class GameScreenController extends Thread implements Initializable {
                     drawWinner(new ArrayList(), GameConstants.DRAW);
                 }
             }
-
-            if(GameConstants.ONLINE.equals(status)) {
-                sendMessage(indexButton);
-            }else{
-               //Envia para AI
-            }
             myTurn = false;
+            if (GameConstants.ONLINE.equals(status)) {
+                sendMessage(indexButton);
+            } else {
+                ai.play(game);
+                myTurn = true;
+            }
+
 
         }
     }
