@@ -13,6 +13,8 @@ import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import model.constants.GameConstants;
+import model.constants.Token;
 import model.entities.Player;
 import model.services.PlayerSocketService;
 import util.Utils;
@@ -33,6 +35,16 @@ public class MainController implements Initializable {
 
     public MainController(Player player) {
         this.player = player;
+    }
+
+
+    @FXML
+    private void onLocalGameClick(ActionEvent event){
+        Stage parentStage = Utils.currentStage(event);
+        player.setIsReady(true);
+        player.setIsHost(true);
+        player.setToken(Token.CROSS);
+        startGame(parentStage, GameConstants.OFFLINE);
     }
 
     @FXML
@@ -70,20 +82,20 @@ public class MainController implements Initializable {
             });
 
             dialogStage.showAndWait();
-            startGame(parentStage);
+            startGame(parentStage, GameConstants.ONLINE);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private void startGame(Stage parentStage) {
+    private void startGame(Stage parentStage, GameConstants status) {
         if (!player.getIsReady()) {
             return;
         }
 
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("GameScreen.fxml"));
-            GameScreenController gameScreenController = new GameScreenController(player);
+            GameScreenController gameScreenController = new GameScreenController(player, status);
             loader.setController(gameScreenController);
             Pane pane = loader.load();
             Scene gameScene = new Scene(pane);

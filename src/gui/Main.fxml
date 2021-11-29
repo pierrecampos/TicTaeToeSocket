@@ -18,12 +18,12 @@
    <center>
       <AnchorPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #fffcf2;" BorderPane.alignment="CENTER">
          <children>
-            <Button layoutX="226.0" layoutY="266.0" mnemonicParsing="false" onAction="#onBtnConnectClick" prefHeight="28.0" prefWidth="148.0" style="-fx-background-color: #403d39;" text="Conectar" textFill="WHITE">
+            <Button layoutX="226.0" layoutY="294.0" mnemonicParsing="false" onAction="#onBtnConnectClick" prefHeight="28.0" prefWidth="148.0" style="-fx-background-color: #403d39;" text="Conectar" textFill="WHITE">
                <effect>
                   <DropShadow />
                </effect>
             </Button>
-            <Button layoutX="227.0" layoutY="314.0" mnemonicParsing="false" onAction="#onBtnHostGameClick" prefHeight="28.0" prefWidth="146.0" style="-fx-background-color: #eb5e28;" text="Host" textFill="WHITE">
+            <Button layoutX="227.0" layoutY="342.0" mnemonicParsing="false" onAction="#onBtnHostGameClick" prefHeight="28.0" prefWidth="146.0" style="-fx-background-color: #eb5e28;" text="Host" textFill="WHITE">
                <effect>
                   <DropShadow />
                </effect>
@@ -39,6 +39,11 @@
                   <Font name="System Bold" size="34.0" />
                </font>
             </Label>
+            <Button layoutX="226.0" layoutY="248.0" mnemonicParsing="false" onAction="#onLocalGameClick" prefHeight="28.0" prefWidth="148.0" style="-fx-background-color: #403d39;" text="Local Game" textFill="WHITE">
+               <effect>
+                  <DropShadow />
+               </effect>
+            </Button>
          </children>
       </AnchorPane>
    </center>

@@ -52,17 +52,22 @@ public class GameScreenController extends Thread implements Initializable {
     private ObjectOutputStream oS;
     private InputStream is;
     private ObjectInputStream oIS;
+    private final GameConstants status;
 
-    public GameScreenController(Player player) {
+    public GameScreenController(Player player, GameConstants status) {
         this.player = player;
+        this.status = status;
         game = new TicTacToe();
+
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         buttons = pane.getChildren().stream().filter(x -> x instanceof Button).collect(Collectors.toList());
         initEvents();
-        initWriter();
+        if (GameConstants.ONLINE.equals(status)) {
+            initWriter();
+        }
     }
 
     private void initWriter() {
@@ -100,8 +105,14 @@ public class GameScreenController extends Thread implements Initializable {
     @Override
     public void run() {
         myTurn = player.getIsHost();
-        listenMessages();
-        rematch(player.getResult());
+        manageMatch();
+    }
+
+    private void manageMatch(){
+        if (GameConstants.ONLINE.equals(status)) {
+            listenMessages();
+            rematch(player.getResult());
+        }
     }
 
     public void listenMessages() {
@@ -185,7 +196,12 @@ public class GameScreenController extends Thread implements Initializable {
                     drawWinner(new ArrayList(), GameConstants.DRAW);
                 }
             }
-            sendMessage(indexButton);
+
+            if(GameConstants.ONLINE.equals(status)) {
+                sendMessage(indexButton);
+            }else{
+               //Envia para AI
+            }
             myTurn = false;
 
         }
@@ -217,7 +233,7 @@ public class GameScreenController extends Thread implements Initializable {
 
     private void createRematch(Boolean create) {
         if (create) {
-            createWindow("GameScreen.fxml", "Jogo da Velha - " + player.getName(), new GameScreenController(player));
+            createWindow("GameScreen.fxml", "Jogo da Velha - " + player.getName(), new GameScreenController(player, status));
         } else {
             try {
                 player.getPlayerSocketService().closeService();
