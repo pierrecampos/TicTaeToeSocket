@@ -21,7 +21,7 @@ public class AI {
                     game.play(row, column, token.value); // Passando IA O
                     double score = minMax(game, 0, true);
                     game.removePlay(row, column);
-                    if(score > bestScore){
+                    if (score > bestScore) {
                         bestScore = score;
                         move = new int[]{row, column};
                     }
@@ -37,9 +37,9 @@ public class AI {
         Token winnerToken = checkWinner(game.getBoard());
         if (winnerToken != null) {
             if (Token.CROSS.equals(winnerToken)) {
-                return 10;
-            } else if (Token.CIRCLE.equals(winnerToken)) {
                 return -10;
+            } else if (Token.CIRCLE.equals(winnerToken)) {
+                return 10;
             } else {
                 return 0;
             }
@@ -50,7 +50,7 @@ public class AI {
             for (int row = 0; row < 3; row++) {
                 for (int column = 0; column < 3; column++) {
                     if (game.validPlay(row, column)) {
-                        game.play(row, column, Token.CIRCLE.value);
+                        game.play(row, column, Token.CROSS.value);
                         double score = minMax(game, depth + 1, false);
                         game.removePlay(row, column);
                         bestScore = Double.max(score, bestScore);
@@ -63,15 +63,14 @@ public class AI {
             for (int row = 0; row < 3; row++) {
                 for (int column = 0; column < 3; column++) {
                     if (game.validPlay(row, column)) {
-                        game.play(row, column, Token.CROSS.value);
-                        double score = minMax(game, depth + 1,true);
+                        game.play(row, column, Token.CIRCLE.value);
+                        double score = minMax(game, depth + 1, true);
                         game.removePlay(row, column);
                         bestScore = Double.min(score, bestScore);
                     }
                 }
             }
             return bestScore;
-
         }
 
     }

@@ -47,7 +47,7 @@ public class Utils {
     }
 
     public static int transformArrayToPosition(int[] array){
-        System.out.println(array[0] + " " + array[1]);
+
         int position = 0;
 
         for(int row = 0; row < 3; row++){

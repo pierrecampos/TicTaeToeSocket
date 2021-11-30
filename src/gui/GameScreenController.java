@@ -205,20 +205,20 @@ public class GameScreenController extends Thread implements Initializable {
             if (GameConstants.ONLINE.equals(status)) {
                 sendMessage(indexButton);
             } else {
-                int[] move = ai.play(game);
-                int index = Utils.transformArrayToPosition(move);
-                draw(index, Token.CIRCLE.value);
+                aiMove();
                 myTurn = true;
             }
-            System.out.println("Jogadas : " + game.getRounds());
-            for (int row = 0; row < 3; row++) {
-                for (int column = 0; column < 3; column++){
-                    System.out.print(game.getBoard()[row][column] + " ");
-                }
-                System.out.println();
-            }
 
+        }
+    }
 
+    private void aiMove(){
+        int[] move = ai.play(game);
+        int index = Utils.transformArrayToPosition(move);
+        draw(index, Token.CIRCLE.value);
+        Boolean[][] winningMatrix = game.isWinner(Token.CIRCLE.value);
+        if(hasWinner(winningMatrix, GameConstants.LOSER)){
+            myTurn = false;
         }
     }
 
