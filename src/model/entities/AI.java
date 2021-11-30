@@ -11,22 +11,29 @@ public class AI {
         this.token = token;
     }
 
-    public void play(TicTacToe game) {
+    public int[] play(TicTacToe game) {
         double bestScore = Double.NEGATIVE_INFINITY;
         int[] move = new int[2];
 
         for (int row = 0; row < 3; row++) {
             for (int column = 0; column < 3; column++) {
                 if (game.validPlay(row, column)) {
-                    game.play(row, column, token.value);
-                    double score = minMax(game, 0, token);
+                    game.play(row, column, token.value); // Passando IA O
+                    double score = minMax(game, 0, true);
+                    game.removePlay(row, column);
+                    if(score > bestScore){
+                        bestScore = score;
+                        move = new int[]{row, column};
+                    }
                 }
             }
         }
+        game.play(move[0], move[1], Token.CIRCLE.value);
 
+        return move;
     }
 
-    private double minMax(TicTacToe game, int depth, Token token) {
+    private double minMax(TicTacToe game, int depth, boolean isMaximizing) {
         Token winnerToken = checkWinner(game.getBoard());
         if (winnerToken != null) {
             if (Token.CROSS.equals(winnerToken)) {
@@ -38,13 +45,13 @@ public class AI {
             }
         }
 
-        if (Token.CROSS.equals(winnerToken)) {
+        if (isMaximizing) {
             double bestScore = Double.NEGATIVE_INFINITY;
             for (int row = 0; row < 3; row++) {
                 for (int column = 0; column < 3; column++) {
                     if (game.validPlay(row, column)) {
-                        game.play(row, column, Token.CROSS.value);
-                        double score = minMax(game, depth + 1, Token.CIRCLE);
+                        game.play(row, column, Token.CIRCLE.value);
+                        double score = minMax(game, depth + 1, false);
                         game.removePlay(row, column);
                         bestScore = Double.max(score, bestScore);
                     }
@@ -57,7 +64,7 @@ public class AI {
                 for (int column = 0; column < 3; column++) {
                     if (game.validPlay(row, column)) {
                         game.play(row, column, Token.CROSS.value);
-                        double score = minMax(game, depth + 1, Token.CIRCLE);
+                        double score = minMax(game, depth + 1,true);
                         game.removePlay(row, column);
                         bestScore = Double.min(score, bestScore);
                     }

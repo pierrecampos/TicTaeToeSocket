@@ -16,7 +16,7 @@ public class TicTacToe {
 
     public void removePlay(int row, int column){
         board[row][column] = null;
-        rounds--
+        rounds--;
     }
 
     public boolean validPlay(int row, int column) {

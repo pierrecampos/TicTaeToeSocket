@@ -205,8 +205,17 @@ public class GameScreenController extends Thread implements Initializable {
             if (GameConstants.ONLINE.equals(status)) {
                 sendMessage(indexButton);
             } else {
-                ai.play(game);
+                int[] move = ai.play(game);
+                int index = Utils.transformArrayToPosition(move);
+                draw(index, Token.CIRCLE.value);
                 myTurn = true;
+            }
+            System.out.println("Jogadas : " + game.getRounds());
+            for (int row = 0; row < 3; row++) {
+                for (int column = 0; column < 3; column++){
+                    System.out.print(game.getBoard()[row][column] + " ");
+                }
+                System.out.println();
             }
 
 

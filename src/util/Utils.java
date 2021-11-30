@@ -46,6 +46,23 @@ public class Utils {
         return indexButtons;
     }
 
+    public static int transformArrayToPosition(int[] array){
+        System.out.println(array[0] + " " + array[1]);
+        int position = 0;
+
+        for(int row = 0; row < 3; row++){
+            for(int column = 0; column < 3; column++){
+              if(row == array[0] && column == array[1]){
+                  System.out.println(position);
+                  return position;
+              }
+              position++;
+            }
+
+        }
+        return 0;
+    }
+
     public static boolean isEquals(Boolean a, Boolean b, Boolean c){
         return a == b && a == c && a != null;
     }
