@@ -46,7 +46,7 @@ public class Utils {
         return indexButtons;
     }
 
-    public static Boolean[][] copyMatrix(Boolean[][] matrix) {
-        return Arrays.stream(matrix).map(x -> Arrays.copyOf(x, x.length)).toArray(Boolean[][]::new);
+    public static boolean isEquals(Boolean a, Boolean b, Boolean c){
+        return a == b && a == c && a != null;
     }
 }

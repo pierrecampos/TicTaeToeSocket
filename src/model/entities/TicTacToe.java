@@ -14,6 +14,11 @@ public class TicTacToe {
         rounds++;
     }
 
+    public void removePlay(int row, int column){
+        board[row][column] = null;
+        rounds--
+    }
+
     public boolean validPlay(int row, int column) {
         return board[row][column] == null;
     }
