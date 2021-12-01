@@ -117,6 +117,7 @@ public class GameScreenController extends Thread implements Initializable {
             rematch(player.getResult());
         } else {
             ai = new AI(Token.CIRCLE);
+            setAIName();
         }
     }
 
@@ -184,6 +185,15 @@ public class GameScreenController extends Thread implements Initializable {
         }
     }
 
+    private void setAIName(){
+        Platform.runLater(() -> {
+            player1Name.setText(player.getName());
+            player2Name.setText("IA");
+            player1Token.setText("X");
+            player2Token.setText("O");
+        });
+    }
+
     private void onButtonBoardClick(ActionEvent event) {
         if (!myTurn) {
             return;
@@ -195,31 +205,48 @@ public class GameScreenController extends Thread implements Initializable {
             game.play(fields[0], fields[1], player.getToken().value);
             draw(indexButton, player.getToken().value);
             Boolean[][] winningMatrix = game.isWinner(player.getToken().value);
-            if (!hasWinner(winningMatrix, GameConstants.WINNER)) {
-                if (game.getRounds() == 9) {
-                    player.setResult(GameConstants.DRAW);
-                    drawWinner(new ArrayList(), GameConstants.DRAW);
+
+            if (!hasWinner(winningMatrix, GameConstants.WINNER) && game.getRounds() == 9) {
+                player.setResult(GameConstants.DRAW);
+                drawWinner(new ArrayList(), GameConstants.DRAW);
+                if (GameConstants.OFFLINE.equals(status)) {
+                    setResultAI(GameConstants.DRAW);
                 }
             }
             myTurn = false;
             if (GameConstants.ONLINE.equals(status)) {
                 sendMessage(indexButton);
             } else {
+                if(hasWinner(winningMatrix, GameConstants.WINNER)){
+                    setResultAI(GameConstants.WINNER);
+                    return;
+                };
                 aiMove();
-                myTurn = true;
             }
 
         }
     }
 
-    private void aiMove(){
+    private void aiMove() {
+        if (game.getRounds() == 9) {
+            return;
+        }
         int[] move = ai.play(game);
         int index = Utils.transformArrayToPosition(move);
         draw(index, Token.CIRCLE.value);
         Boolean[][] winningMatrix = game.isWinner(Token.CIRCLE.value);
-        if(hasWinner(winningMatrix, GameConstants.LOSER)){
+        if (hasWinner(winningMatrix, GameConstants.LOSER)) {
             myTurn = false;
+            setResultAI(GameConstants.LOSER);
+            return;
         }
+        myTurn = true;
+    }
+
+    private void setResultAI(GameConstants result) {
+        Stage parentStage = (Stage) pane.getScene().getWindow();
+        PlayAgainController playAgainController = new PlayAgainController(parentStage, this::createRematch, result);
+        playAgainController.start();
     }
 
     private boolean validPLay(int index) {

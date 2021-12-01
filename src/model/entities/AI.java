@@ -12,13 +12,14 @@ public class AI {
     }
 
     public int[] play(TicTacToe game) {
+
         double bestScore = Double.NEGATIVE_INFINITY;
         int[] move = new int[2];
 
         for (int row = 0; row < 3; row++) {
             for (int column = 0; column < 3; column++) {
                 if (game.validPlay(row, column)) {
-                    game.play(row, column, token.value); // Passando IA O
+                    game.play(row, column, token.value);
                     double score = minMax(game, 0, true);
                     game.removePlay(row, column);
                     if (score > bestScore) {
@@ -28,8 +29,8 @@ public class AI {
                 }
             }
         }
-        game.play(move[0], move[1], Token.CIRCLE.value);
 
+        game.play(move[0], move[1], Token.CIRCLE.value);
         return move;
     }
 

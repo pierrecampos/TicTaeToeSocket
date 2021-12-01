@@ -53,7 +53,6 @@ public class Utils {
         for(int row = 0; row < 3; row++){
             for(int column = 0; column < 3; column++){
               if(row == array[0] && column == array[1]){
-                  System.out.println(position);
                   return position;
               }
               position++;
